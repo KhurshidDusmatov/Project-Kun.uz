@@ -64,7 +64,7 @@ ADMIN, MODERATOR, PUBLISHER, USER
     4. Get List (ADMIN) (Pagination)
         (id,key,name_uz, name_ru, name_en,visible,created_date)
     5. Get By Lang (Language keladi shu language dagi name larini berib yuboramiz)
-        (id,key,name) (name ga tegishli name_.. dagi qiymat qo'yiladi.)
+        (id,key,name) (name ga tegishli name_.. dagi qiymat qo'yiladi.).
 4. Region
     1. Create  (ADMIN)
         (key,name_uz, name_ru, name_en)

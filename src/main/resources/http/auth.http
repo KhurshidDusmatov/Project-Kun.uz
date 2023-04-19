@@ -17,5 +17,5 @@ Content-Type:  application/json
   "surname": "Alik",
   "email": "hello@mail.com",
   "phone": "900",
-  "password": "222",
+  "password": "222"
 }

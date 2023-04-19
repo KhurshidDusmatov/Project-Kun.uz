@@ -1,14 +1,12 @@
 package com.example.service;
 
 
-import com.example.dto.RegionDTO;
-import com.example.entity.ArticleTypeEntity;
-import com.example.entity.RegionEntity;
+import com.example.dto.CategoryDTO;
+import com.example.entity.CategoryEntity;
 import com.example.exps.AppBadRequestException;
-import com.example.repository.ArticleTypeRepository;
+import com.example.repository.CategoryRepository;
 import com.example.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -16,36 +14,36 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RegionService {
+public class CategoryService {
     @Autowired
-    private RegionRepository regionRepository;
+    private CategoryRepository categoryRepository;
 
-    public RegionDTO create(RegionDTO dto, Integer adminId) {
-        RegionEntity entity = new RegionEntity();
+    public CategoryDTO create(CategoryDTO dto, Integer adminId) {
+        CategoryEntity entity = new CategoryEntity();
         entity.setNameUz(dto.getNameUz());
         entity.setNameRu(dto.getNameRu());
         entity.setNameEn(dto.getNameEn());
         entity.setVisible(true);
         entity.setPrtId(adminId);
-        regionRepository.save(entity);
+        categoryRepository.save(entity);
         dto.setId(entity.getId());
         dto.setVisible(entity.getVisible());
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }
 
-    public String update(Integer id, RegionDTO dto, Integer adminId) {
-        RegionEntity entity = get(id);
+    public String update(Integer id, CategoryDTO dto, Integer adminId) {
+        CategoryEntity entity = get(id);
         entity.setNameUz(dto.getNameUz());
         entity.setNameRu(dto.getNameRu());
         entity.setNameEn(dto.getNameEn());
         entity.setPrtId(adminId);
-        regionRepository.save(entity);
+        categoryRepository.save(entity);
         return "Successfully updated";
     }
 
-    private RegionEntity get(Integer id){
-        Optional<RegionEntity> optional = regionRepository.findById(id);
+    private CategoryEntity get(Integer id){
+        Optional<CategoryEntity> optional = categoryRepository.findById(id);
         if (optional.isEmpty()) {
             throw new AppBadRequestException("ArticleType not found");
         }
@@ -53,27 +51,27 @@ public class RegionService {
     }
 
     public String delete(Integer id, Integer adminId) {
-        RegionEntity entity = get(id);
+        CategoryEntity entity = get(id);
         entity.setVisible(false);
         entity.setPrtId(adminId);
-        regionRepository.save(entity);
+        categoryRepository.save(entity);
         return "Profile deleted";
     }
 
-//    public Page<RegionDTO> pagination(Integer page, Integer size) {
+//    public Page<CategoryDTO> pagination(Integer page, Integer size) {
 //        Sort sort = Sort.by(Sort.Direction.ASC, "id");
 //        Pageable pageable = PageRequest.of(page - 1, size, sort);
-//        Page<RegionEntity> entityPage = regionRepository.findAll(pageable);
-//        List<RegionEntity> entities = entityPage.getContent();
-//        List<RegionDTO> dtos = new LinkedList<>();
+//        Page<CategoryEntity> entityPage = categoryRepository.findAll(pageable);
+//        List<CategoryEntity> entities = entityPage.getContent();
+//        List<CategoryDTO> dtos = new LinkedList<>();
 //        entities.forEach(entity -> {
-//            RegionDTO dto = new RegionDTO();
+//            CategoryDTO dto = new CategoryDTO();
 //            dtos.add(toDTO(entity, dto));
 //        });
 //        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
 //    }
 
-    private RegionDTO toDTO(RegionEntity entity, RegionDTO dto) {
+    private CategoryDTO toDTO(CategoryEntity entity, CategoryDTO dto) {
         dto.setId(entity.getId());
         dto.setNameUz(entity.getNameUz());
         dto.setNameRu(entity.getNameRu());
@@ -83,15 +81,15 @@ public class RegionService {
         return dto;
     }
 
-    public List<RegionDTO> getByLanguage(String language) {
+    public List<CategoryDTO> getByLanguage(String language) {
         return null;
     }
 
-    public List<RegionDTO> getAll() {
-        Iterable<RegionEntity> iterable = regionRepository.findAll();
-        List<RegionDTO> dtos = new LinkedList<>();
+    public List<CategoryDTO> getAll() {
+        Iterable<CategoryEntity> iterable = categoryRepository.findAll();
+        List<CategoryDTO> dtos = new LinkedList<>();
         iterable.forEach(regionEntity -> {
-            RegionDTO dto = new RegionDTO();
+            CategoryDTO dto = new CategoryDTO();
             dtos.add(toDTO(regionEntity, dto));
         });
         return dtos;

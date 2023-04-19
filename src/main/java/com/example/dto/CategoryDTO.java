@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class RegionDTO {
+public class CategoryDTO {
     private Integer id;
     private String nameUz;
     private String nameRu;

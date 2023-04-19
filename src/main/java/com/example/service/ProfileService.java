@@ -1,14 +1,20 @@
 package com.example.service;
 
 import com.example.dto.ProfileDTO;
+import com.example.dto.UpdateDTO;
 import com.example.entity.ProfileEntity;
 import com.example.enums.GeneralStatus;
+import com.example.exps.AppBadRequestException;
 import com.example.repository.ProfileRepository;
 import com.example.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfileService {
@@ -20,6 +26,43 @@ public class ProfileService {
         isValidProfile(dto);
 
         ProfileEntity entity = new ProfileEntity();
+        return setDetailToEntity(entity, dto, adminId);
+    }
+
+    public void isValidProfile(ProfileDTO dto) {
+        Optional<ProfileEntity> optional = profileRepository.findByEmailAndPasswordAndVisible(dto.getEmail(),
+                dto.getPassword(),
+                true);
+        if (!optional.isEmpty()) {
+            throw new AppBadRequestException("This profile already exist");
+        }
+    }
+
+    public ProfileDTO update(Integer id, ProfileDTO dto, Integer adminId) {
+        ProfileEntity entity = get(id);
+        return setDetailToEntity(entity, dto, adminId);
+    }
+
+    public String update(Integer id, UpdateDTO dto){
+        ProfileEntity entity = get(id);
+        entity.setName(dto.getName());
+        entity.setSurname(dto.getSurname());
+        entity.setPassword(dto.getPassword());
+        entity.setPassword(dto.getPassword());
+        entity.setEmail(dto.getEmail());
+        profileRepository.save(entity);
+        return "Successfully updated";
+    }
+
+    private ProfileEntity get(Integer id){
+        Optional<ProfileEntity> optional = profileRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new AppBadRequestException("Profile not found");
+        }
+        return optional.get();
+    }
+
+    private ProfileDTO setDetailToEntity(ProfileEntity entity, ProfileDTO dto, Integer adminId){
         entity.setName(dto.getName());
         entity.setSurname(dto.getSurname());
         entity.setPhone(dto.getPhone());
@@ -30,15 +73,41 @@ public class ProfileService {
         entity.setVisible(true);
         entity.setPrtId(adminId);
         entity.setStatus(GeneralStatus.ACTIVE);
-        profileRepository.save(entity); // save profile
-
+        profileRepository.save(entity);
         dto.setPassword(null);
         dto.setId(entity.getId());
         return dto;
     }
 
-    public void isValidProfile(ProfileDTO dto) {
-        // throw ...
+    public Page<ProfileDTO> pagination(Integer page, Integer size) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<ProfileEntity> entityPage = profileRepository.findAll(pageable);
+        List<ProfileEntity> entities = entityPage.getContent();
+        List<ProfileDTO> dtos = new LinkedList<>();
+        entities.forEach(entity -> {
+            ProfileDTO dto = new ProfileDTO();
+            dtos.add(toDTO(entity, dto));
+        });
+        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
     }
 
+    private ProfileDTO toDTO(ProfileEntity entity, ProfileDTO dto) {
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setSurname(entity.getSurname());
+        dto.setEmail(entity.getEmail());
+        dto.setPhone(entity.getPhone());
+        dto.setPassword(entity.getPassword());
+        dto.setRole(entity.getRole());
+        return dto;
+    }
+
+    public String delete(Integer id, Integer adminId) {
+        ProfileEntity entity = get(id);
+        entity.setVisible(false);
+        entity.setPrtId(adminId);
+        profileRepository.save(entity);
+        return "Profile deleted";
+    }
 }

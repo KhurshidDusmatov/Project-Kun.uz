@@ -13,4 +13,7 @@ interface ProfileRepository extends PagingAndSortingRepository<ProfileEntity, In
         CrudRepository<ProfileEntity, Integer> {
 
     Optional<ProfileEntity> findByEmailAndPasswordAndVisible(String email, String password, boolean visible);
+
+    Optional<ProfileEntity> findByEmail(String email);
+
 }

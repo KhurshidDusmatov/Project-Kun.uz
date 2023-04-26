@@ -23,12 +23,7 @@ public class ProfileController {
     @PostMapping({"", "/"})
     public ResponseEntity<ProfileDTO> create(@RequestBody ProfileDTO dto,
                                              @RequestHeader("Authorization") String authorization) {
-        String[] str = authorization.split(" ");
-        String jwt = str[1];
-        JwtDTO jwtDTO = JwtUtil.decode(jwt);
-        if (!jwtDTO.getRole().equals(ProfileRole.ADMIN)) {
-            throw new MethodNotAllowedException("Method not allowed");
-        }
+        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(profileService.create(dto, jwtDTO.getId()));
     }
 
@@ -36,12 +31,7 @@ public class ProfileController {
     public ResponseEntity<ProfileDTO> update(@RequestParam("id") Integer id,
                                              @RequestBody ProfileDTO dto,
                                              @RequestHeader("Authorization") String authorization) {
-        String[] str = authorization.split(" ");
-        String jwt = str[1];
-        JwtDTO jwtDTO = JwtUtil.decode(jwt);
-        if (!jwtDTO.getRole().equals(ProfileRole.ADMIN)) {
-            throw new MethodNotAllowedException("Method not allowed");
-        }
+        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(profileService.update(id, dto, jwtDTO.getId()));
     }
 
@@ -54,12 +44,7 @@ public class ProfileController {
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam("id") Integer id,
                                          @RequestHeader("Authorization") String authorization) {
-        String[] str = authorization.split(" ");
-        String jwt = str[1];
-        JwtDTO jwtDTO = JwtUtil.decode(jwt);
-        if (!jwtDTO.getRole().equals(ProfileRole.ADMIN)) {
-            throw new MethodNotAllowedException("Method not allowed");
-        }
+        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(profileService.delete(id, jwtDTO.getId()));
     }
 

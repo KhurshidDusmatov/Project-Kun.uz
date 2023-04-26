@@ -1,12 +1,9 @@
 package com.example.controller;
 
 import com.example.dto.CategoryDTO;
-import com.example.dto.JwtDTO;
-import com.example.dto.RegionDTO;
+import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ProfileRole;
-import com.example.exps.MethodNotAllowedException;
 import com.example.service.CategoryService;
-import com.example.service.RegionService;
 import com.example.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,8 @@
 package com.example.controller;
 
 import com.example.dto.ArticleTypeDTO;
-import com.example.dto.JwtDTO;
-import com.example.dto.ProfileDTO;
-import com.example.entity.ArticleTypeEntity;
+import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ProfileRole;
-import com.example.exps.MethodNotAllowedException;
 import com.example.service.ArticleTypeService;
 import com.example.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;

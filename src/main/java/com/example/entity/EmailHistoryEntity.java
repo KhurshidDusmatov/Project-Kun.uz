@@ -14,7 +14,7 @@ public class EmailHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "message")
+    @Column(name = "message", length = 512)
     private String message;
     @Column(name = "email")
     private String email;

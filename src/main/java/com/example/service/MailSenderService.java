@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.example.entity.EmailHistoryEntity;
+import com.example.repository.EmailHistoryRepository;
 import com.example.util.JwtUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 public class MailSenderService {
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    private EmailHistoryRepository emailHistoryRepository;
     @Value("${spring.mail.username}")
     private String fromAccount;
     @Value("${server.host}")
@@ -61,9 +65,16 @@ public class MailSenderService {
             helper.setSubject(subject);
             helper.setText(text, true);
             javaMailSender.send(msg);
+            /// Save to Email History
+//            saveToEmailHistory(toAccount, text);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
-
+    }
+    public void saveToEmailHistory(String email, String message){
+        EmailHistoryEntity entity = new EmailHistoryEntity();
+        entity.setEmail(email);
+        entity.setMessage(message);
+        emailHistoryRepository.save(entity);
     }
 }

@@ -17,3 +17,7 @@ Content-Disposition: form-data; name="file"; filename="test_video.mp4"
 
 ### Delete
 DELETE http://localhost:8080/api/v1/attach/delete/c15ac389-8dd7-4a67-8742-9d947b4f5480.jpg
+
+### Pagination
+GET http://localhost:8080/api/v1/attach/pagination?page=1&size=2
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI2MDE0MDAsImlkIjoyLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODI2ODc4MDAsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.a2PihT_qS7-FgEDLKCzApdF5qkVMUghysdXDw5MA6iyipta2mTT6g8_B2MUTEnkGSHYNGv-IKD0c8WSMhNFHjA

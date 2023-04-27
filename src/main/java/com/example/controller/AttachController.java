@@ -1,8 +1,14 @@
 package com.example.controller;
 
+import com.example.dto.ProfileDTO;
+import com.example.dto.attach.AttachDTO;
+import com.example.dto.jwt.JwtDTO;
+import com.example.enums.ProfileRole;
 import com.example.service.AttachService;
+import com.example.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +55,15 @@ public class AttachController {
     public ResponseEntity<Boolean> delete(@PathVariable("fineName") String fileName) {
         boolean delete = attachService.delete(fileName);
         return ResponseEntity.ok(delete);
+    }
+
+    @GetMapping(value = "/pagination")
+    public ResponseEntity<?> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
+                                        @RequestParam(value = "size", defaultValue = "4") int size,
+                                        @RequestHeader("Authorization") String authorization) {
+        JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
+        Page<AttachDTO> pagination = attachService.pagination(page, size);
+        return ResponseEntity.ok(pagination);
     }
 
 }

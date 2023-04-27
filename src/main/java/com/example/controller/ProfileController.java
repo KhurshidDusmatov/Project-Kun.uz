@@ -72,8 +72,15 @@ public class ProfileController {
     }
 
     @PostMapping("/filter-1")
-    public ResponseEntity<List<ProfileDTO>> getProfileWithFilter(@RequestBody ProfileFilterRequestDTO filterDTO){
+    public ResponseEntity<List<ProfileDTO>> getProfileWithFilter(@RequestBody ProfileFilterRequestDTO filterDTO) {
         List<ProfileDTO> dtos = profileService.filter(filterDTO);
         return ResponseEntity.ok(dtos);
+    }
+
+    @PutMapping("/update-photo")
+    public ResponseEntity<String> updatePhotoId(@RequestParam("file-name") String fileName,
+                                                @RequestHeader("Authorization") String authorization) {
+        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
+        return ResponseEntity.ok(profileService.updatePhotoId(fileName, jwtDTO.getId()));
     }
 }

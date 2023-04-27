@@ -1,12 +1,17 @@
 package com.example.service;
 
+import com.example.dto.ArticleDTO;
+import com.example.dto.ProfileDTO;
+import com.example.dto.attach.AttachDTO;
 import com.example.entity.AttachEntity;
+import com.example.entity.ProfileEntity;
 import com.example.exps.ItemNotFoundException;
 import com.example.repository.AttachRepository;
 import org.aspectj.weaver.JoinPointSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +26,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -181,5 +188,28 @@ public class AttachService {
         } catch (IOException e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
+    }
+
+    public Page<AttachDTO> pagination(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<AttachEntity> entityPage = attachRepository.findAll(pageable);
+        List<AttachEntity> entities = entityPage.getContent();
+        List<AttachDTO> dtos = new LinkedList<>();
+        entities.forEach(entity -> {
+            AttachDTO dto = new AttachDTO();
+            dtos.add(toDTO(entity, dto));
+        });
+        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
+    }
+
+    private AttachDTO toDTO(AttachEntity entity, AttachDTO dto) {
+        dto.setId(entity.getId());
+        dto.setPath(entity.getPath());
+        dto.setSize(entity.getSize());
+        dto.setExtension(entity.getExtension());
+        dto.setOriginalName(entity.getOriginalName());
+        dto.setCreatedData(entity.getCreatedData());
+        return dto;
     }
 }

@@ -39,6 +39,8 @@ public class ProfileEntity {
     private LocalDateTime createdDate = LocalDateTime.now();
     @Column(name = "prt_id")
     private Integer prtId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_id")
+    private AttachEntity photo;
 
-    // photo_id
 }

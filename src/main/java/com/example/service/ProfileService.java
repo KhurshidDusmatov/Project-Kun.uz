@@ -3,9 +3,11 @@ package com.example.service;
 import com.example.dto.ProfileDTO;
 import com.example.dto.UpdateDTO;
 import com.example.dto.filter.ProfileFilterRequestDTO;
+import com.example.entity.AttachEntity;
 import com.example.entity.ProfileEntity;
 import com.example.enums.GeneralStatus;
 import com.example.exps.AppBadRequestException;
+import com.example.repository.AttachRepository;
 import com.example.repository.ProfileCustomRepository;
 import com.example.repository.ProfileRepository;
 import com.example.util.MD5Util;
@@ -25,6 +27,10 @@ public class ProfileService {
     private ProfileRepository profileRepository;
     @Autowired
     private ProfileCustomRepository profileCustomRepository;
+    @Autowired
+    private AttachRepository attachRepository;
+    @Autowired
+    private AttachService attachService;
 
     public ProfileDTO create(ProfileDTO dto, Integer adminId) {
         // check - homework
@@ -124,5 +130,15 @@ public class ProfileService {
             dtos.add(toDTO(entity, dto));
         });
         return dtos;
+    }
+
+    public String updatePhotoId(String fileName, Integer currentProfileId) {
+        ProfileEntity entity = get(currentProfileId);
+        int lastIndex = fileName.lastIndexOf(".");
+        String id = fileName.substring(0,lastIndex);
+        AttachEntity attachEntity = attachService.get(id);
+        entity.setPhoto(attachEntity);
+        profileRepository.save(entity);
+        return "Successfully updated";
     }
 }

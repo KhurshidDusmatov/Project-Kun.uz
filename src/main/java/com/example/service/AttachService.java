@@ -3,7 +3,10 @@ package com.example.service;
 import com.example.entity.AttachEntity;
 import com.example.exps.ItemNotFoundException;
 import com.example.repository.AttachRepository;
+import org.aspectj.weaver.JoinPointSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,49 +69,6 @@ public class AttachService {
         int lastIndex = fileName.lastIndexOf(".");
         return fileName.substring(lastIndex + 1);
     }
-
-    public byte[] loadImage(String fileName) {
-        byte[] imageInByte;
-
-        BufferedImage originalImage;
-        try {
-            originalImage = ImageIO.read(new File("attaches/" + fileName));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(originalImage, "png", baos);
-            baos.flush();
-            imageInByte = baos.toByteArray();
-            baos.close();
-            return imageInByte;
-        } catch (Exception e) {
-            return new byte[0];
-        }
-    }
-    public byte[] open_general(String attachName) {
-        byte[] data;
-        try {
-            Path file = Paths.get("attaches/" + attachName);
-            data = Files.readAllBytes(file);
-            return data;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new byte[0];
-    }
-    public byte[] open_general2(String attachName) {
-        // 20f0f915-93ec-4099-97e3-c1cb7a95151f.jpg
-        int lastIndex = attachName.lastIndexOf(".");
-        String id = attachName.substring(0,lastIndex);
-        AttachEntity attachEntity = get(id);
-        byte[] data;
-        try {                                                     // attaches/2023/4/25/20f0f915-93ec-4099-97e3-c1cb7a95151f.jpg
-            Path file = Paths.get("attaches/" + attachEntity.getPath() + "/" + attachName);
-            data = Files.readAllBytes(file);
-            return data;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new byte[0];
-    }
     public String saveToSystem3(MultipartFile file) {
         try {
             String pathFolder = getYmDString(); // 2022/04/23
@@ -136,6 +97,48 @@ public class AttachService {
         }
         return null;
     }
+    public byte[] open(String fileName) {
+        byte[] imageInByte;
+
+        BufferedImage originalImage;
+        try {
+            originalImage = ImageIO.read(new File("attaches/" + fileName));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(originalImage, "png", baos);
+            baos.flush();
+            imageInByte = baos.toByteArray();
+            baos.close();
+            return imageInByte;
+        } catch (Exception e) {
+            return new byte[0];
+        }
+    }
+    public byte[] openGeneral(String attachName) {
+        byte[] data;
+        try {
+            Path file = Paths.get("attaches/" + attachName);
+            data = Files.readAllBytes(file);
+            return data;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new byte[0];
+    }
+    public byte[] openGeneral2(String attachName) {
+        // 20f0f915-93ec-4099-97e3-c1cb7a95151f.jpg
+        int lastIndex = attachName.lastIndexOf(".");
+        String id = attachName.substring(0,lastIndex);
+        AttachEntity attachEntity = get(id);
+        byte[] data;
+        try {                                                     // attaches/2023/4/25/20f0f915-93ec-4099-97e3-c1cb7a95151f.jpg
+            Path file = Paths.get("attaches/" + attachEntity.getPath() + "/" + attachName);
+            data = Files.readAllBytes(file);
+            return data;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new byte[0];
+    }
     public String getYmDString() {
         int year = Calendar.getInstance().get(Calendar.YEAR);
         int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
@@ -147,5 +150,36 @@ public class AttachService {
         return attachRepository.findById(id).orElseThrow(() -> {
             throw new ItemNotFoundException("Attach not ound");
         });
+    }
+
+
+    public Resource download(String fileName) {
+        try {
+            int lastIndex = fileName.lastIndexOf(".");
+            String id = fileName.substring(0, lastIndex);
+            AttachEntity attachEntity = get(id);
+            Path file = Paths.get("attaches/" + attachEntity.getPath() + "/" + fileName);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()){
+                return resource;
+            }else {
+                throw new RuntimeException("Couldn't read the file");
+            }
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean delete(String fileName) {
+        try {
+            int lastIndex = fileName.lastIndexOf(".");
+            String id = fileName.substring(0, lastIndex);
+            AttachEntity attachEntity = get(id);
+            Path file = Paths.get("attaches/" + attachEntity.getPath() + "/" + fileName);
+            return Files.deleteIfExists(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
     }
 }

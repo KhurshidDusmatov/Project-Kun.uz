@@ -2,17 +2,18 @@ POST http://localhost:8080/api/v1/attach/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="test_imge_1.jpg"
+Content-Disposition: form-data; name="file"; filename="test_img.jpg"
 
 < C:\Users\Khurshid\Downloads\test_img.jpg
 
 ### video
-POST http://192.168.0.146:8080/api/v1/attach/upload
+POST http://localhost:8080/api/v1/attach/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="333.mp4"
+Content-Disposition: form-data; name="file"; filename="test_video.mp4"
 
-< C:\Users\BigMan\Desktop\11\333.mp4
+< C:\Users\Khurshid\Downloads\test_video.mp4
 
-#< C:\Users\BigMan\Desktop\11\test_imge_1.jpg
+### Delete
+DELETE http://localhost:8080/api/v1/attach/delete/c15ac389-8dd7-4a67-8742-9d947b4f5480.jpg

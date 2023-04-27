@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.filter.ProfileFilterRequestDTO;
 import com.example.dto.jwt.JwtDTO;
 import com.example.dto.ProfileDTO;
 import com.example.dto.UpdateDTO;
@@ -68,5 +69,11 @@ public class ProfileController {
                                         @RequestParam(value = "size", defaultValue = "4") int size) {
         Page<ProfileDTO> pagination = profileService.pagination(page, size);
         return ResponseEntity.ok(pagination);
+    }
+
+    @PostMapping("/filter-1")
+    public ResponseEntity<List<ProfileDTO>> getProfileWithFilter(@RequestBody ProfileFilterRequestDTO filterDTO){
+        List<ProfileDTO> dtos = profileService.filter(filterDTO);
+        return ResponseEntity.ok(dtos);
     }
 }

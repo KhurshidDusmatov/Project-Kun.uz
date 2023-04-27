@@ -2,9 +2,11 @@ package com.example.service;
 
 import com.example.dto.ProfileDTO;
 import com.example.dto.UpdateDTO;
+import com.example.dto.filter.ProfileFilterRequestDTO;
 import com.example.entity.ProfileEntity;
 import com.example.enums.GeneralStatus;
 import com.example.exps.AppBadRequestException;
+import com.example.repository.ProfileCustomRepository;
 import com.example.repository.ProfileRepository;
 import com.example.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,8 @@ import java.util.Optional;
 public class ProfileService {
     @Autowired
     private ProfileRepository profileRepository;
+    @Autowired
+    private ProfileCustomRepository profileCustomRepository;
 
     public ProfileDTO create(ProfileDTO dto, Integer adminId) {
         // check - homework
@@ -109,5 +114,15 @@ public class ProfileService {
         entity.setPrtId(adminId);
         profileRepository.save(entity);
         return "Profile deleted";
+    }
+
+    public List<ProfileDTO> filter(ProfileFilterRequestDTO filterDTO) {
+        List<ProfileEntity> entities = profileCustomRepository.filter(filterDTO);
+        List<ProfileDTO> dtos = new ArrayList<>();
+        entities.forEach(entity -> {
+            ProfileDTO dto = new ProfileDTO();
+            dtos.add(toDTO(entity, dto));
+        });
+        return dtos;
     }
 }

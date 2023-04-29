@@ -49,12 +49,9 @@ public class ArticleTypeService {
         return optional.get();
     }
 
-    public String delete(Integer id, Integer adminId) {
-        ArticleTypeEntity entity = get(id);
-        entity.setVisible(false);
-        entity.setPrtId(adminId);
-        articleTypeRepository.save(entity);
-        return "Profile deleted";
+    public Boolean delete(Integer id, Integer adminId) {
+        articleTypeRepository.updateVisible(id, adminId);
+        return true;
     }
 
     public Page<ArticleTypeDTO> pagination(Integer page, Integer size) {

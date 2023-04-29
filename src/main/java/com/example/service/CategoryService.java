@@ -7,6 +7,7 @@ import com.example.exps.AppBadRequestException;
 import com.example.repository.CategoryRepository;
 import com.example.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -31,7 +32,6 @@ public class CategoryService {
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }
-
     public String update(Integer id, CategoryDTO dto, Integer adminId) {
         CategoryEntity entity = get(id);
         entity.setNameUz(dto.getNameUz());
@@ -42,35 +42,29 @@ public class CategoryService {
         return "Successfully updated";
     }
 
-    private CategoryEntity get(Integer id){
+    public CategoryEntity get(Integer id){
         Optional<CategoryEntity> optional = categoryRepository.findById(id);
         if (optional.isEmpty()) {
-            throw new AppBadRequestException("ArticleType not found");
+            throw new AppBadRequestException("Item not found");
         }
         return optional.get();
     }
-
-    public String delete(Integer id, Integer adminId) {
-        CategoryEntity entity = get(id);
-        entity.setVisible(false);
-        entity.setPrtId(adminId);
-        categoryRepository.save(entity);
-        return "Profile deleted";
+    public Boolean delete(Integer id, Integer adminId) {
+        categoryRepository.updateVisible(id, adminId);
+        return true;
     }
-
-//    public Page<CategoryDTO> pagination(Integer page, Integer size) {
-//        Sort sort = Sort.by(Sort.Direction.ASC, "id");
-//        Pageable pageable = PageRequest.of(page - 1, size, sort);
-//        Page<CategoryEntity> entityPage = categoryRepository.findAll(pageable);
-//        List<CategoryEntity> entities = entityPage.getContent();
-//        List<CategoryDTO> dtos = new LinkedList<>();
-//        entities.forEach(entity -> {
-//            CategoryDTO dto = new CategoryDTO();
-//            dtos.add(toDTO(entity, dto));
-//        });
-//        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
-//    }
-
+    public Page<CategoryDTO> pagination(Integer page, Integer size) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<CategoryEntity> entityPage = categoryRepository.findAll(pageable);
+        List<CategoryEntity> entities = entityPage.getContent();
+        List<CategoryDTO> dtos = new LinkedList<>();
+        entities.forEach(entity -> {
+            CategoryDTO dto = new CategoryDTO();
+            dtos.add(toDTO(entity, dto));
+        });
+        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
+    }
     private CategoryDTO toDTO(CategoryEntity entity, CategoryDTO dto) {
         dto.setId(entity.getId());
         dto.setNameUz(entity.getNameUz());
@@ -80,11 +74,9 @@ public class CategoryService {
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }
-
     public List<CategoryDTO> getByLanguage(String language) {
         return null;
     }
-
     public List<CategoryDTO> getAll() {
         Iterable<CategoryEntity> iterable = categoryRepository.findAll();
         List<CategoryDTO> dtos = new LinkedList<>();

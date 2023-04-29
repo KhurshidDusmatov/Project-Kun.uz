@@ -1,13 +1,9 @@
 package com.example.service;
 
-import com.example.dto.ArticleDTO;
-import com.example.dto.ProfileDTO;
 import com.example.dto.attach.AttachDTO;
 import com.example.entity.AttachEntity;
-import com.example.entity.ProfileEntity;
 import com.example.exps.ItemNotFoundException;
 import com.example.repository.AttachRepository;
-import org.aspectj.weaver.JoinPointSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -155,7 +151,7 @@ public class AttachService {
     }
     public AttachEntity get(String id) {
         return attachRepository.findById(id).orElseThrow(() -> {
-            throw new ItemNotFoundException("Attach not ound");
+            throw new ItemNotFoundException("Attach not found");
         });
     }
 

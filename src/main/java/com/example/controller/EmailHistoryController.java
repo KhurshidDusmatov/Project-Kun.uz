@@ -1,12 +1,7 @@
 package com.example.controller;
 
-import com.example.dto.ArticleDTO;
 import com.example.dto.EmailHistoryDTO;
-import com.example.dto.RegionDTO;
-import com.example.dto.jwt.JwtDTO;
-import com.example.entity.ArticleEntity;
 import com.example.enums.ProfileRole;
-import com.example.service.ArticleService;
 import com.example.service.EmailHistoryService;
 import com.example.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

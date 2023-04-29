@@ -33,7 +33,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam("id") Integer id,
+    public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
                                          @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(categoryService.delete(id, jwtDTO.getId()));

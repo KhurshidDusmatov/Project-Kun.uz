@@ -44,34 +44,31 @@ public class RegionService {
         return "Successfully updated";
     }
 
-    private RegionEntity get(Integer id){
+    public RegionEntity get(Integer id){
         Optional<RegionEntity> optional = regionRepository.findById(id);
         if (optional.isEmpty()) {
-            throw new AppBadRequestException("ArticleType not found");
+            throw new AppBadRequestException("Item not found");
         }
         return optional.get();
     }
 
-    public String delete(Integer id, Integer adminId) {
-        RegionEntity entity = get(id);
-        entity.setVisible(false);
-        entity.setPrtId(adminId);
-        regionRepository.save(entity);
-        return "Profile deleted";
+    public Boolean delete(Integer id, Integer adminId) {
+        regionRepository.updateVisible(id, adminId);
+        return true;
     }
 
-//    public Page<RegionDTO> pagination(Integer page, Integer size) {
-//        Sort sort = Sort.by(Sort.Direction.ASC, "id");
-//        Pageable pageable = PageRequest.of(page - 1, size, sort);
-//        Page<RegionEntity> entityPage = regionRepository.findAll(pageable);
-//        List<RegionEntity> entities = entityPage.getContent();
-//        List<RegionDTO> dtos = new LinkedList<>();
-//        entities.forEach(entity -> {
-//            RegionDTO dto = new RegionDTO();
-//            dtos.add(toDTO(entity, dto));
-//        });
-//        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
-//    }
+    public Page<RegionDTO> pagination(Integer page, Integer size) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<RegionEntity> entityPage = regionRepository.findAll(pageable);
+        List<RegionEntity> entities = entityPage.getContent();
+        List<RegionDTO> dtos = new LinkedList<>();
+        entities.forEach(entity -> {
+            RegionDTO dto = new RegionDTO();
+            dtos.add(toDTO(entity, dto));
+        });
+        return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
+    }
 
     private RegionDTO toDTO(RegionEntity entity, RegionDTO dto) {
         dto.setId(entity.getId());

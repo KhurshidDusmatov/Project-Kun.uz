@@ -65,7 +65,7 @@ public class ProfileService {
         return "Successfully updated";
     }
 
-    private ProfileEntity get(Integer id){
+    public ProfileEntity get(Integer id){
         Optional<ProfileEntity> optional = profileRepository.findById(id);
         if (optional.isEmpty()) {
             throw new AppBadRequestException("Profile not found");

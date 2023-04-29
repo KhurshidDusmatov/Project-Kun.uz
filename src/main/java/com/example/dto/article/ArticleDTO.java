@@ -1,6 +1,8 @@
-package com.example.dto;
+package com.example.dto.article;
 
-import com.example.kun_uz_.enums.ArticleStatus;
+import com.example.enums.ArticleStatus;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +20,7 @@ public class ArticleDTO {
     private Integer moderatorId;
     private Integer publisherId;
     private Integer viewCount;
+    private String attachId;
     private ArticleStatus articleStatus;
 
 }

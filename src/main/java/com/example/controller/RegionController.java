@@ -17,23 +17,24 @@ import java.util.List;
 public class RegionController {
     @Autowired
     private RegionService regionService;
+
     @PostMapping({"", "/"})
     public ResponseEntity<RegionDTO> create(@RequestBody RegionDTO dto,
-                                                 @RequestHeader("Authorization") String authorization) {
+                                            @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.create(dto, jwtDTO.getId()));
     }
 
     @PutMapping("/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
-                                             @RequestBody RegionDTO dto,
-                                             @RequestHeader("Authorization") String authorization) {
+                                         @RequestBody RegionDTO dto,
+                                         @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.update(id, dto, jwtDTO.getId()));
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam("id") Integer id,
+    public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
                                          @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(regionService.delete(id, jwtDTO.getId()));

@@ -1,11 +1,13 @@
 package com.example.controller;
 
-import com.example.dto.ArticleDTO;
+import com.example.dto.article.ArticleDTO;
+import com.example.dto.article.ArticleRequestDTO;
 import com.example.dto.jwt.JwtDTO;
 import com.example.entity.ArticleEntity;
 import com.example.enums.ProfileRole;
 import com.example.service.ArticleService;
 import com.example.util.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,10 @@ public class ArticleController {
     private ArticleService service;
 
     @PostMapping({"", "/"})
-    public ResponseEntity<?> create(@RequestBody ArticleDTO dto,
+    public ResponseEntity<?> create(@RequestBody @Valid ArticleRequestDTO dto,
                                     @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(service.create(dto));
+        return ResponseEntity.ok(service.create(dto, jwtDTO.getId()));
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<ArticleDTO> update(@PathVariable("id") String id, @RequestBody ArticleDTO dto,

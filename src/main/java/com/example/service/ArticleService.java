@@ -42,6 +42,7 @@ public class ArticleService {
         entity.setModeratorId(moderId);
         entity.setRegionId(dto.getRegionId());
         entity.setCategoryId(dto.getCategoryId());
+        entity.setArticleTypeId(dto.getArticleTypeId());
         entity.setAttachId(dto.getAttachId());
         // type
         articleRepository.save(entity);
@@ -55,6 +56,7 @@ public class ArticleService {
         entity.setContent(dto.getContent());
         entity.setRegionId(dto.getRegionId());
         entity.setCategoryId(dto.getCategoryId());
+        entity.setArticleTypeId(dto.getArticleTypeId());
         entity.setAttachId(dto.getAttachId());
         entity.setStatus(ArticleStatus.NOT_PUBLISHED);
         articleRepository.save(entity);

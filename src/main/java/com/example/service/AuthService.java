@@ -1,10 +1,10 @@
 package com.example.service;
 
-import com.example.dto.*;
 import com.example.dto.auth.AuthDTO;
 import com.example.dto.auth.AuthResponseDTO;
 import com.example.dto.auth.RegistrationDTO;
 import com.example.dto.auth.RegistrationResponseDTO;
+import com.example.dto.profile.ProfileDTO;
 import com.example.entity.ProfileEntity;
 import com.example.enums.GeneralStatus;
 import com.example.enums.ProfileRole;
@@ -13,6 +13,7 @@ import com.example.exps.ItemNotFoundException;
 import com.example.repository.ProfileRepository;
 import com.example.util.JwtUtil;
 import com.example.util.MD5Util;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class AuthService {
     @Autowired
     private MailSenderService mailSenderService;
 
-    public String register(ProfileDTO dto) {
+    public String register(@Valid ProfileDTO dto) {
         isValidProfile(dto);
         ProfileEntity entity = new ProfileEntity();
         entity.setName(dto.getName());
@@ -70,7 +71,7 @@ public class AuthService {
 //        return new RegistrationResponseDTO(s);
 //    }
 
-    public AuthResponseDTO login(AuthDTO dto) {
+    public AuthResponseDTO login(@Valid AuthDTO dto) {
         Optional<ProfileEntity> optional = profileRepository.findByEmailAndPasswordAndVisible(dto.getEmail(), MD5Util.getMd5Hash(dto.getPassword()), true);
         if (optional.isEmpty()) {
             throw new ItemNotFoundException("Email or password incorrect");
@@ -87,7 +88,7 @@ public class AuthService {
         return responseDTO;
     }
 
-    public RegistrationResponseDTO registration(RegistrationDTO dto) {
+    public RegistrationResponseDTO registration(@Valid RegistrationDTO dto) {
         // TODO check -?
         Optional<ProfileEntity> optional = profileRepository.findByEmail(dto.getEmail());
         if (optional.isPresent()) {

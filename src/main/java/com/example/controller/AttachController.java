@@ -1,8 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.ProfileDTO;
 import com.example.dto.attach.AttachDTO;
-import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.AttachService;
 import com.example.util.JwtUtil;

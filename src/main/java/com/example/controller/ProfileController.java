@@ -2,11 +2,12 @@ package com.example.controller;
 
 import com.example.dto.filter.ProfileFilterRequestDTO;
 import com.example.dto.jwt.JwtDTO;
-import com.example.dto.ProfileDTO;
-import com.example.dto.UpdateDTO;
+import com.example.dto.profile.ProfileDTO;
+import com.example.dto.profile.ProfileUpdateDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.ProfileService;
 import com.example.util.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class ProfileController {
 
     @PutMapping("/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
-                                         @RequestBody UpdateDTO dto) {
+                                         @RequestBody ProfileUpdateDTO dto) {
         return ResponseEntity.ok(profileService.update(id, dto));
     }
 
@@ -72,7 +73,7 @@ public class ProfileController {
     }
 
     @PostMapping("/filter-1")
-    public ResponseEntity<List<ProfileDTO>> getProfileWithFilter(@RequestBody ProfileFilterRequestDTO filterDTO) {
+    public ResponseEntity<List<ProfileDTO>> getProfileWithFilter(@RequestBody @Valid ProfileFilterRequestDTO filterDTO) {
         List<ProfileDTO> dtos = profileService.filter(filterDTO);
         return ResponseEntity.ok(dtos);
     }

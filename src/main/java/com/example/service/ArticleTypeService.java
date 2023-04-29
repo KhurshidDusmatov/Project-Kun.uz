@@ -1,9 +1,7 @@
 package com.example.service;
 
 import com.example.dto.ArticleTypeDTO;
-import com.example.dto.ProfileDTO;
 import com.example.entity.ArticleTypeEntity;
-import com.example.entity.ProfileEntity;
 import com.example.exps.AppBadRequestException;
 import com.example.repository.ArticleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

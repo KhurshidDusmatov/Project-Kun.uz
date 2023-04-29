@@ -18,13 +18,15 @@ public class ArticleRequestDTO {
     private String content;
     @NotNull(message = "item required")
     @Positive
-    private Integer attachId;
+    private String attachId;
     @NotNull(message = "item required")
     @Positive
     private Integer regionId;
     @NotNull(message = "item required")
     @Positive
     private Integer categoryId;
-//    @NotEmpty(message = "Should provide value")
-//    private List<Integer> typeList;
+    @NotNull(message = " articleType required")
+    @Positive
+    private Integer articleTypeId;
+
 }

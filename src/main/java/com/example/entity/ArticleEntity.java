@@ -31,7 +31,7 @@ public class ArticleEntity {
     private Integer sharedCount = 0;
 
     @Column(name = "attach_id")
-    private Integer attachId;
+    private String attachId;
     @ManyToOne
     @JoinColumn(name = "attach_id", insertable = false, updatable = false)
     private AttachEntity attach;
@@ -47,6 +47,12 @@ public class ArticleEntity {
     @ManyToOne
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private CategoryEntity category;
+
+    @Column(name = "article_type_id")
+    private Integer articleTypeId;
+    @ManyToOne
+    @JoinColumn(name = "article_type_id", insertable = false, updatable = false)
+    private ArticleTypeEntity articleType;
 
     @Column(name = "moderator_id")
     private Integer moderatorId;

@@ -1,7 +1,7 @@
 package com.example.service;
 
-import com.example.dto.ProfileDTO;
-import com.example.dto.UpdateDTO;
+import com.example.dto.profile.ProfileDTO;
+import com.example.dto.profile.ProfileUpdateDTO;
 import com.example.dto.filter.ProfileFilterRequestDTO;
 import com.example.entity.AttachEntity;
 import com.example.entity.ProfileEntity;
@@ -54,7 +54,7 @@ public class ProfileService {
         return setDetailToEntity(entity, dto, adminId);
     }
 
-    public String update(Integer id, UpdateDTO dto){
+    public String update(Integer id, ProfileUpdateDTO dto){
         ProfileEntity entity = get(id);
         entity.setName(dto.getName());
         entity.setSurname(dto.getSurname());

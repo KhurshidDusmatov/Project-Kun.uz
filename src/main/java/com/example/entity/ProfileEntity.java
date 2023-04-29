@@ -40,7 +40,7 @@ public class ProfileEntity {
     @Column(name = "prt_id")
     private Integer prtId;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo_id")
-    private AttachEntity photo;
+    @JoinColumn(name = "attach_id")
+    private AttachEntity attach;
 
 }

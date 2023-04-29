@@ -137,7 +137,7 @@ public class ProfileService {
         int lastIndex = fileName.lastIndexOf(".");
         String id = fileName.substring(0,lastIndex);
         AttachEntity attachEntity = attachService.get(id);
-        entity.setPhoto(attachEntity);
+        entity.setAttach(attachEntity);
         profileRepository.save(entity);
         return "Successfully updated";
     }

@@ -48,6 +48,20 @@ public class ArticleService {
         return dto;
     }
 
+    public ArticleRequestDTO update(ArticleRequestDTO dto, String id) {
+        ArticleEntity entity = get(id);
+        entity.setTitle(dto.getTitle());
+        entity.setDescription(dto.getDescription());
+        entity.setContent(dto.getContent());
+        entity.setRegionId(dto.getRegionId());
+        entity.setCategoryId(dto.getCategoryId());
+        entity.setAttachId(dto.getAttachId());
+        entity.setStatus(ArticleStatus.NOT_PUBLISHED);
+        articleRepository.save(entity);
+        return dto;
+    }
+
+
 
     public Boolean delete(String  id) {
       articleRepository.delete(get(id));

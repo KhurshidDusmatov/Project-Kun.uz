@@ -1,17 +1,15 @@
 ### Create profle
 POST localhost:8080/api/v1/article
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI1MTM4NDMsImlkIjo0LCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgyNjAwMjQzLCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.JuKtZTwcEpB1Z6y4YKDtZX_LmhBcCEEWLq1LZVxoq-Q-1IBj9mKf1B1JIIGHc5mE92C8TppcgTo8sc9U_o0Tcw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI3NTI5NzMsImlkIjo0LCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgyODM5MzczLCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.TjTatP-OM7EdLBgCILanUAWtpEXmweY01MQO7iUCFEyv4uY5RK1-9WIiVVYU1mZAKSk1Q6MpFdDQPh0EfMdclA
 Content-Type:  application/json
 
 {
-
-  "title": "aaa",
-  "description": "Aliyev",
-  "content": "asdfghjk",
-  "sharedCount": 12,
-  "regionId": 1,
-  "categoryId": 1
-
+  "title": "Laptops and Personal computers",
+  "description": "Core I vs Ryzen AMD vs M1-2",
+  "content": "Vs vs Vs",
+  "regionId": 2,
+  "categoryId": 2,
+  "attachId": 2
 }
 
 ### Update profle
@@ -41,5 +39,5 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODIzOTYxODUsImlkIjoxMCwic
 Content-Type:  application/json
 
 {
-  ""
+
 }

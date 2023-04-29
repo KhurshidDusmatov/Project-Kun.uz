@@ -26,10 +26,10 @@ public class ArticleController {
         return ResponseEntity.ok(service.create(dto, jwtDTO.getId()));
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<ArticleDTO> update(@PathVariable("id") String id, @RequestBody ArticleDTO dto,
+    public ResponseEntity<ArticleRequestDTO> update(@PathVariable("id") String id, @RequestBody ArticleRequestDTO dto,
                                              @RequestHeader("Authorization") String authorization) {
         JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(service.update(id, dto));
+        return ResponseEntity.ok(service.update(dto, id));
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") String id,
@@ -40,19 +40,20 @@ public class ArticleController {
     }
 
     //    4 chi
-    @PutMapping("/update2/{id}")
-    public ResponseEntity<Boolean> update2(@PathVariable("id") String id, @RequestBody ArticleDTO dto,
-                                           @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(service.update2(id, dto));
-    }
+//    @PutMapping("/update2/{id}")
+//    public ResponseEntity<Boolean> update2(@PathVariable("id") String id, @RequestBody ArticleDTO dto,
+//                                           @RequestHeader("Authorization") String authorization) {
+//        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
+//        return ResponseEntity.ok(service.update2(id, dto));
+//    }
 
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<ArticleEntity>> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                          @RequestParam(value = "size", defaultValue = "6") int size,
-                                                          @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(service.getAll(page, size));
-    }
+
+//    @GetMapping("/pagination")
+//    public ResponseEntity<Page<ArticleEntity>> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
+//                                                          @RequestParam(value = "size", defaultValue = "6") int size,
+//                                                          @RequestHeader("Authorization") String authorization) {
+//        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
+//        return ResponseEntity.ok(service.getAll(page, size));
+//    }
 
 }

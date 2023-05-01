@@ -13,9 +13,4 @@ public class AdviceController {
     public ResponseEntity<String> handleException(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
-
-   /* @ExceptionHandler(PhoneAlreadyExistsException.class)
-    public ResponseEntity<String> handleException(PhoneAlreadyExistsException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }*/
 }

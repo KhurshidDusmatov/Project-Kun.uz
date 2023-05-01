@@ -17,16 +17,12 @@ public class ArticleRequestDTO {
     @NotBlank(message = "Content qani")
     private String content;
     @NotNull(message = "item required")
-    @Positive
     private String attachId;
     @NotNull(message = "item required")
-    @Positive
     private Integer regionId;
     @NotNull(message = "item required")
-    @Positive
     private Integer categoryId;
     @NotNull(message = " articleType required")
-    @Positive
     private Integer articleTypeId;
 
 }

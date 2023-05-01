@@ -12,7 +12,6 @@ import lombok.Setter;
 @Setter
 public class ProfileDTO {
     @NotNull
-    @Positive
     private Integer id;
     @NotNull(message = "Name required")
     @Size(min = 3, max = 225, message = "Name must be between 3 and 225 characters")

@@ -1,28 +1,30 @@
 package com.example.service;
 
-import com.example.dto.article.ArticleDTO;
 import com.example.dto.article.ArticleRequestDTO;
-import com.example.entity.ArticleEntity;
-import com.example.entity.CategoryEntity;
-import com.example.entity.ProfileEntity;
-import com.example.entity.RegionEntity;
+import com.example.dto.article.ArticleShortInfoDTO;
+import com.example.entity.*;
 import com.example.enums.ArticleStatus;
-import com.example.exps.AppBadRequestException;
+import com.example.exps.ItemNotFoundException;
+import com.example.mapper.ArticleShortInfoMapper;
 import com.example.repository.ArticleRepository;
 import com.example.repository.CategoryRepository;
 import com.example.repository.RegionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class ArticleService {
 
-    private final ArticleRepository articleRepository;
+    @Autowired
+    private ArticleRepository articleRepository;
+    private final AttachService attachService;
     private final RegionRepository regionRepository;
     private final CategoryRepository categoryRepository;
     private final ProfileService profileService;
@@ -35,6 +37,8 @@ public class ArticleService {
 //        ProfileEntity moderator = profileService.get(moderId);
 //        RegionEntity region = regionService.get(dto.getRegionId());
 //        CategoryEntity category = categoryService.get(dto.getCategoryId());
+        AttachEntity attach = attachService.get(dto.getAttachId());
+
         ArticleEntity entity = new ArticleEntity();
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
@@ -42,8 +46,8 @@ public class ArticleService {
         entity.setModeratorId(moderId);
         entity.setRegionId(dto.getRegionId());
         entity.setCategoryId(dto.getCategoryId());
-        entity.setArticleTypeId(dto.getArticleTypeId());
-        entity.setAttachId(dto.getAttachId());
+        entity.setTypeId(dto.getArticleTypeId());
+        entity.setAttach(attach);
         // type
         articleRepository.save(entity);
         return dto;
@@ -51,29 +55,77 @@ public class ArticleService {
 
     public ArticleRequestDTO update(ArticleRequestDTO dto, String id) {
         ArticleEntity entity = get(id);
+        AttachEntity attach = attachService.get(dto.getAttachId());
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setContent(dto.getContent());
         entity.setRegionId(dto.getRegionId());
         entity.setCategoryId(dto.getCategoryId());
-        entity.setArticleTypeId(dto.getArticleTypeId());
-        entity.setAttachId(dto.getAttachId());
+        entity.setTypeId(dto.getArticleTypeId());
+        entity.setAttach(attach);
         entity.setStatus(ArticleStatus.NOT_PUBLISHED);
         articleRepository.save(entity);
         return dto;
     }
 
-
-
     public Boolean delete(String  id) {
-      articleRepository.delete(get(id));
+      articleRepository.deleteArticle(id);
         return true;
     }
 
-    public ArticleEntity get(String id){
-        return articleRepository.findById(id).orElseThrow(() -> {
-            throw new AppBadRequestException("Article not found");
+    public ArticleEntity get(String id) {
+        Optional<ArticleEntity> optional = articleRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new ItemNotFoundException("Item not found: " + id);
+        }
+        return optional.get();
+    }
+
+
+    public Boolean changeStatus(ArticleStatus status, String id, Integer prtId) {
+        ArticleEntity entity = get(id);
+        if (status.equals(ArticleStatus.PUBLISHED)) {
+            entity.setPublishedDate(LocalDateTime.now());
+            entity.setPublisherId(prtId);
+        }
+        entity.setStatus(status);
+        articleRepository.save(entity);
+        // articleRepository.changeStatus(status, id);
+        return true;
+    }
+
+
+    public ArticleShortInfoDTO toArticleShortInfo(ArticleEntity entity) {
+        ArticleShortInfoDTO dto = new ArticleShortInfoDTO();
+        dto.setId(entity.getId());
+        dto.setTitle(entity.getTitle());
+        dto.setDescription(entity.getDescription());
+        dto.setPublishedDate(entity.getPublishedDate());
+        dto.setImage(attachService.getAttachLink(entity.getAttachId()));
+        return dto;
+    }
+
+
+    public List<ArticleShortInfoDTO> getLast5ByTypeId(Integer typeId) {
+        List<ArticleEntity> entityList = articleRepository.findTop5ByTypeIdAndStatusAndVisibleOrderByCreatedDateDesc(
+                typeId,
+                ArticleStatus.PUBLISHED,
+                true);
+        List<ArticleShortInfoDTO> dtoList = new LinkedList<>();
+        entityList.forEach(entity -> {
+            dtoList.add(toArticleShortInfo(entity));
         });
+        return dtoList;
+    }
+
+    public ArticleShortInfoDTO toArticleShortInfo(ArticleShortInfoMapper entity) {
+        ArticleShortInfoDTO dto = new ArticleShortInfoDTO();
+        dto.setId(entity.getId());
+        dto.setTitle(entity.getTitle());
+        dto.setDescription(entity.getDescription());
+        dto.setPublishedDate(entity.getPublished_date());
+        dto.setImage(attachService.getAttachLink(entity.getAttachId()));
+        return dto;
     }
 
     //    public ArticleDTO create(ArticleDTO dto) {

@@ -2,41 +2,66 @@ package com.example.controller;
 
 import com.example.dto.article.ArticleDTO;
 import com.example.dto.article.ArticleRequestDTO;
+import com.example.dto.article.ArticleShortInfoDTO;
 import com.example.dto.jwt.JwtDTO;
 import com.example.entity.ArticleEntity;
+import com.example.enums.ArticleStatus;
 import com.example.enums.ProfileRole;
 import com.example.service.ArticleService;
+import com.example.service.AttachService;
 import com.example.util.JwtUtil;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/article")
 public class ArticleController {
     @Autowired
-    private ArticleService service;
+    private ArticleService articleService;
+    private final AttachService attachService;
 
     @PostMapping({"", "/"})
     public ResponseEntity<?> create(@RequestBody @Valid ArticleRequestDTO dto,
                                     @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(service.create(dto, jwtDTO.getId()));
+        return ResponseEntity.ok(articleService.create(dto, jwtDTO.getId()));
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ArticleRequestDTO> update(@PathVariable("id") String id, @RequestBody ArticleRequestDTO dto,
-                                             @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(service.update(dto, id));
-    }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteById(@PathVariable("id") String id,
-                                              @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(service.delete(id));
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ArticleRequestDTO> update(@PathVariable("id") String id,
+                                                    @RequestBody @Valid ArticleRequestDTO dto,
+                                                    @RequestHeader("Authorization") String authorization) {
+        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
+        return ResponseEntity.ok(articleService.update(dto, id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") String id,
+                                    @RequestHeader("Authorization") String authorization) {
+        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR, ProfileRole.ADMIN);
+        return ResponseEntity.ok(articleService.delete(id));
+    }
+
+    @PostMapping("/change-status/{id}")
+    public ResponseEntity<?> changeStatus(@PathVariable("id") String id,
+                                          @RequestParam String status,
+                                          @RequestHeader("Authorization") String authorization) {
+        JwtDTO jwt = JwtUtil.getJwtDTO(authorization, ProfileRole.PUBLISHER);
+        return ResponseEntity.ok(articleService.changeStatus(ArticleStatus.valueOf(status), id, jwt.getId()));
+    }
+
+    public ArticleShortInfoDTO toArticleShortInfo(ArticleEntity entity) {
+        ArticleShortInfoDTO dto = new ArticleShortInfoDTO();
+        dto.setId(entity.getId());
+        dto.setTitle(entity.getTitle());
+        dto.setDescription(entity.getDescription());
+        dto.setPublishedDate(entity.getPublishedDate());
+        dto.setImage(attachService.getAttachLink(entity.getAttachId()));
+        return dto;
     }
 
     //    4 chi

@@ -44,7 +44,7 @@ public class ProfileService {
         Optional<ProfileEntity> optional = profileRepository.findByEmailAndPasswordAndVisible(dto.getEmail(),
                 dto.getPassword(),
                 true);
-        if (!optional.isEmpty()) {
+        if (optional.isPresent()) {
             throw new AppBadRequestException("This profile already exist");
         }
     }

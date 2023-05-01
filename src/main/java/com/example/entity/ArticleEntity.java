@@ -4,17 +4,24 @@ package com.example.entity;
 import com.example.enums.ArticleStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Table(name = "article")
 @Entity
+@NoArgsConstructor
 public class ArticleEntity {
+    public ArticleEntity(String id, String title, String description, String attachId, LocalDateTime publishedDate) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.publishedDate = publishedDate;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -36,6 +43,7 @@ public class ArticleEntity {
     @JoinColumn(name = "attach_id", insertable = false, updatable = false)
     private AttachEntity attach;
 
+
     @Column(name = "region_id")
     private Integer regionId;
     @ManyToOne
@@ -49,10 +57,10 @@ public class ArticleEntity {
     private CategoryEntity category;
 
     @Column(name = "article_type_id")
-    private Integer articleTypeId;
+    private Integer typeId;
     @ManyToOne
     @JoinColumn(name = "article_type_id", insertable = false, updatable = false)
-    private ArticleTypeEntity articleType;
+    private ArticleTypeEntity type;
 
     @Column(name = "moderator_id")
     private Integer moderatorId;
@@ -69,7 +77,7 @@ public class ArticleEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
     @Column(name = "published_date")
-    private LocalDate publishedDate;
+    private LocalDateTime publishedDate;
     @Column(name = "visible")
     private Boolean visible = Boolean.TRUE;
     @Column(name = "view_count")

@@ -1,31 +1,32 @@
-### Create profle
+### Create Article
 POST localhost:8080/api/v1/article
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI3NTI5NzMsImlkIjo0LCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgyODM5MzczLCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.TjTatP-OM7EdLBgCILanUAWtpEXmweY01MQO7iUCFEyv4uY5RK1-9WIiVVYU1mZAKSk1Q6MpFdDQPh0EfMdclA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI4Nzc5NTksImlkIjo0LCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgyOTY0MzU5LCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.wdgon2xzLLt418S3KyN5NRAkF_tNE4z7tp_7fYoj67OlTCgaxR-APDIlQ_FTZmDahMnqH460iO2EyG4L5bXofQ
 Content-Type:  application/json
 
 {
-  "title": "Laptops and Personal computers",
-  "description": "Core I vs Ryzen AMD vs M1-2",
+  "title": "Coca Cola Pepsi Fanta ",
+  "description": "Biggest waters in the world",
   "content": "Vs vs Vs",
-  "regionId": 2,
-  "categoryId": 2,
-  "attachId": 2
+  "regionId": 1,
+  "categoryId": 1,
+  "attachId": "c15ac389-8dd7-4a67-8742-9d947b4f5480",
+  "articleTypeId": 1
 }
 
-### Update profle
-PUT localhost:8080/api/v1/article/update/236c7588-da3f-4a22-930b-372aec18138a
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI1MTM4NDMsImlkIjo0LCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgyNjAwMjQzLCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.JuKtZTwcEpB1Z6y4YKDtZX_LmhBcCEEWLq1LZVxoq-Q-1IBj9mKf1B1JIIGHc5mE92C8TppcgTo8sc9U_o0Tcw
+### Update Article
+PUT localhost:8080/api/v1/article/update/444da53e-1808-4148-8842-25ea366f793a
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI4Nzc5NTksImlkIjo0LCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgyOTY0MzU5LCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.wdgon2xzLLt418S3KyN5NRAkF_tNE4z7tp_7fYoj67OlTCgaxR-APDIlQ_FTZmDahMnqH460iO2EyG4L5bXofQ
 Content-Type:  application/json
 
 {
 
-  "title": "BBB",
-  "description": "BBBB",
-  "content": "BBB",
-  "shared_count": 12,
-  "region_id": 1,
-  "category_id": 1
-
+  "title": "M-Benz vs BMW ",
+  "description": "Most opposites in the world",
+  "content": "Vs",
+  "regionId": 1,
+  "categoryId": 1,
+  "attachId": "c15ac389-8dd7-4a67-8742-9d947b4f5480",
+  "articleTypeId": 1
 }
 
 ### Delete profle

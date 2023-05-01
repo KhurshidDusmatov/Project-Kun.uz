@@ -20,16 +20,41 @@ public class AttachController {
     private AttachService attachService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
-        String fileName = attachService.saveToSystem3(file);
-        return ResponseEntity.ok().body(fileName);
+    public ResponseEntity<AttachDTO> upload(@RequestParam("file") MultipartFile file) {
+        AttachDTO res = attachService.saveToSystem3(file);
+        return ResponseEntity.ok().body(res);
     }
       // This method for only image
+//    @GetMapping(value = "/open/{fileName}", produces = MediaType.IMAGE_PNG_VALUE)
+//    public byte[] open(@PathVariable("fileName") String fileName) {
+//        if (fileName != null && fileName.length() > 0) {
+//            try {
+//                return this.attachService.open(fileName);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return new byte[0];
+//            }
+//        }
+//        return null;
+//    }
     @GetMapping(value = "/open/{fileName}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] open(@PathVariable("fileName") String fileName) {
         if (fileName != null && fileName.length() > 0) {
             try {
-                return this.attachService.open(fileName);
+                return this.attachService.loadImage2(fileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new byte[0];
+            }
+        }
+        return null;
+    }
+
+    @GetMapping(value = "/load/{fileName}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] load(@PathVariable("fileName") String fileName) {
+        if (fileName != null && fileName.length() > 0) {
+            try {
+                return this.attachService.loadImage2(fileName);
             } catch (Exception e) {
                 e.printStackTrace();
                 return new byte[0];

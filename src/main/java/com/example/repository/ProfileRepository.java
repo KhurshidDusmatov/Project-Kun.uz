@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public
-interface ProfileRepository extends PagingAndSortingRepository<ProfileEntity, Integer>,
+public interface ProfileRepository extends PagingAndSortingRepository<ProfileEntity, Integer>,
         CrudRepository<ProfileEntity, Integer> {
 
     Optional<ProfileEntity> findByEmailAndPasswordAndVisible(String email, String password, boolean visible);

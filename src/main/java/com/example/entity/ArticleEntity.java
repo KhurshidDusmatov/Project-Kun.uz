@@ -19,6 +19,7 @@ public class ArticleEntity {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.attachId = attachId;
         this.publishedDate = publishedDate;
     }
 

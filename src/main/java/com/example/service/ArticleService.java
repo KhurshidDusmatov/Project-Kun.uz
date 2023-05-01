@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,6 @@ public class ArticleService {
 //        ProfileEntity moderator = profileService.get(moderId);
 //        RegionEntity region = regionService.get(dto.getRegionId());
 //        CategoryEntity category = categoryService.get(dto.getCategoryId());
-        AttachEntity attach = attachService.get(dto.getAttachId());
 
         ArticleEntity entity = new ArticleEntity();
         entity.setTitle(dto.getTitle());
@@ -47,7 +47,7 @@ public class ArticleService {
         entity.setRegionId(dto.getRegionId());
         entity.setCategoryId(dto.getCategoryId());
         entity.setTypeId(dto.getArticleTypeId());
-        entity.setAttach(attach);
+        entity.setAttachId(dto.getAttachId());
         // type
         articleRepository.save(entity);
         return dto;
@@ -55,14 +55,13 @@ public class ArticleService {
 
     public ArticleRequestDTO update(ArticleRequestDTO dto, String id) {
         ArticleEntity entity = get(id);
-        AttachEntity attach = attachService.get(dto.getAttachId());
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setContent(dto.getContent());
         entity.setRegionId(dto.getRegionId());
         entity.setCategoryId(dto.getCategoryId());
         entity.setTypeId(dto.getArticleTypeId());
-        entity.setAttach(attach);
+        entity.setAttachId(dto.getAttachId());
         entity.setStatus(ArticleStatus.NOT_PUBLISHED);
         articleRepository.save(entity);
         return dto;
@@ -104,20 +103,6 @@ public class ArticleService {
         dto.setImage(attachService.getAttachLink(entity.getAttachId()));
         return dto;
     }
-
-
-    public List<ArticleShortInfoDTO> getLast5ByTypeId(Integer typeId) {
-        List<ArticleEntity> entityList = articleRepository.findTop5ByTypeIdAndStatusAndVisibleOrderByCreatedDateDesc(
-                typeId,
-                ArticleStatus.PUBLISHED,
-                true);
-        List<ArticleShortInfoDTO> dtoList = new LinkedList<>();
-        entityList.forEach(entity -> {
-            dtoList.add(toArticleShortInfo(entity));
-        });
-        return dtoList;
-    }
-
     public ArticleShortInfoDTO toArticleShortInfo(ArticleShortInfoMapper entity) {
         ArticleShortInfoDTO dto = new ArticleShortInfoDTO();
         dto.setId(entity.getId());
@@ -127,6 +112,44 @@ public class ArticleService {
         dto.setImage(attachService.getAttachLink(entity.getAttachId()));
         return dto;
     }
+
+    public List<ArticleShortInfoDTO> getLast5ByTypeId(Integer typeId) {
+        List<ArticleShortInfoMapper> entityList = articleRepository.find5ByTypeIdNative(
+                typeId,
+                ArticleStatus.PUBLISHED.toString(),
+                5);
+        List<ArticleShortInfoDTO> dtoList = new LinkedList<>();
+        entityList.forEach(entity -> {
+            dtoList.add(toArticleShortInfo(entity));
+        });
+        return dtoList;
+    }
+    public List<ArticleShortInfoDTO> getLastNByTypeId(Integer typeId, Integer limit) {
+        List<ArticleShortInfoMapper> entityList = articleRepository.getTopN(
+                typeId,
+                ArticleStatus.PUBLISHED.toString(),
+                limit);
+        List<ArticleShortInfoDTO> dtoList = new LinkedList<>();
+        entityList.forEach(entity -> {
+            dtoList.add(toArticleShortInfo(entity));
+        });
+        return dtoList;
+    }
+
+    public List<ArticleShortInfoDTO> getLast8NotGivenList(List<String> list) {
+        List<ArticleEntity> all = articleRepository.getAll(ArticleStatus.PUBLISHED);
+        List<ArticleShortInfoDTO> result = new ArrayList<>();
+        for (ArticleEntity articleEntity : all) {
+            for (String id : list) {
+                if (!articleEntity.getId().equals(id)){
+                    result.add(toArticleShortInfo(articleEntity));
+                }
+            }
+            if (result.size()==8) break;
+        }
+        return result;
+    }
+
 
     //    public ArticleDTO create(ArticleDTO dto) {
 //        isValidProfile(dto);

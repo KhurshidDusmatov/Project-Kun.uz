@@ -34,8 +34,6 @@ public interface ArticleRepository extends CrudRepository<ArticleEntity,String> 
     List<ArticleShortInfoMapper> find5ByTypeIdNative(@Param("typeId") Integer typeId,
                                                      @Param("status") String status,
                                                      @Param("limit") Integer limit);
-
-
     @Query("From ArticleEntity where status =:status and visible = true and typeId =:typeId order by createdDate desc limit 5")
     List<ArticleEntity> find5ByTypeId(@Param("typeId") Integer typeId, @Param("status") ArticleStatus status);
 
@@ -43,9 +41,13 @@ public interface ArticleRepository extends CrudRepository<ArticleEntity,String> 
     List<ArticleEntity> find5ByTypeId2(@Param("typeId") Integer typeId, @Param("status") ArticleStatus status);
 
     @Query(value = "SELECT a.id,a.title,a.description,a.attach_id,a.published_date " +
-            " FROM article AS a  where  a.type_id =:t_id and status =:status order by created_date desc Limit :limit",
+            " FROM article AS a  where  a.article_type_id =:t_id and status =:status order by created_date desc Limit :limit",
             nativeQuery = true)
     List<ArticleShortInfoMapper> getTopN(@Param("t_id") Integer t_id, @Param("status") String status, @Param("limit") Integer limit);
+
+    @Query("From ArticleEntity where status =:status and visible = true  order by createdDate desc")
+    List<ArticleEntity> getAll(@Param("status") ArticleStatus status);
+
 
 
 

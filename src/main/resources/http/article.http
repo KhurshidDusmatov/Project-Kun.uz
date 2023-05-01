@@ -4,13 +4,13 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI4Nzc5NTksImlkIjo0LCJyb
 Content-Type:  application/json
 
 {
-  "title": "Coca Cola Pepsi Fanta ",
+  "title": "title 7 ",
   "description": "Biggest waters in the world",
   "content": "Vs vs Vs",
   "regionId": 1,
   "categoryId": 1,
-  "attachId": "c15ac389-8dd7-4a67-8742-9d947b4f5480",
-  "articleTypeId": 1
+  "attachId": "82caaa61-3b21-4c8e-8005-c3e32b5f5008",
+  "articleTypeId": 2
 }
 
 ### Update Article
@@ -20,7 +20,7 @@ Content-Type:  application/json
 
 {
 
-  "title": "M-Benz vs BMW ",
+  "title": "title 4 ",
   "description": "Most opposites in the world",
   "content": "Vs",
   "regionId": 1,
@@ -34,11 +34,5 @@ DELETE localhost:8080/api/v1/article/delete/2
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODIzOTYxODUsImlkIjoxMCwicm9sZSI6Ik1PREVSQVRPUiIsImV4cCI6MTY4MjQ4MjU4NSwiaXNzIjoiS3VudXogdGVzdCBwb3J0YWxpIn0.vdC5XN2ih6I-lACkcL0R23fdem4sclwMEO9F9EKbw5HPbgYeI4XLv0ECnv6B02Wk4LNwDtjWcG8bVnKYWpJ_AQ
 Content-Type:  application/json
 
-### Update profle
-PUT localhost:8080/api/v1/article/update/236c7588-da3f-4a22-930b-372aec18138a
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODIzOTYxODUsImlkIjoxMCwicm9sZSI6Ik1PREVSQVRPUiIsImV4cCI6MTY4MjQ4MjU4NSwiaXNzIjoiS3VudXogdGVzdCBwb3J0YWxpIn0.vdC5XN2ih6I-lACkcL0R23fdem4sclwMEO9F9EKbw5HPbgYeI4XLv0ECnv6B02Wk4LNwDtjWcG8bVnKYWpJ_AQ
-Content-Type:  application/json
-
-{
-
-}
+### Get Top 5 article By TypeId
+GET localhost:8080/api/v1/article/type/2/five

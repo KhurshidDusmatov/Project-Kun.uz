@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.article.ArticleDTO;
 import com.example.dto.article.ArticleRequestDTO;
+import com.example.dto.article.ArticleRequestListDTO;
 import com.example.dto.article.ArticleShortInfoDTO;
 import com.example.dto.jwt.JwtDTO;
 import com.example.entity.ArticleEntity;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/article")
@@ -52,6 +56,20 @@ public class ArticleController {
                                           @RequestHeader("Authorization") String authorization) {
         JwtDTO jwt = JwtUtil.getJwtDTO(authorization, ProfileRole.PUBLISHER);
         return ResponseEntity.ok(articleService.changeStatus(ArticleStatus.valueOf(status), id, jwt.getId()));
+    }
+    @GetMapping("/type/{id}/five")
+    public ResponseEntity<List<ArticleShortInfoDTO>> get5ByTypeId(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(articleService.getLast5ByTypeId(id));
+    }
+
+    @GetMapping("/type/{id}")
+    public ResponseEntity<List<ArticleShortInfoDTO>> getNByTypeId(@PathVariable("id") Integer typeId, @RequestParam("limit") Integer limit) {
+        return ResponseEntity.ok(articleService.getLastNByTypeId(typeId, limit));
+    }
+
+    @GetMapping("/type/{id}")
+    public ResponseEntity<List<ArticleShortInfoDTO>> getLast8NotGivenList(@RequestBody List<String> list) {
+        return ResponseEntity.ok(articleService.getLast8NotGivenList(list));
     }
 
     public ArticleShortInfoDTO toArticleShortInfo(ArticleEntity entity) {

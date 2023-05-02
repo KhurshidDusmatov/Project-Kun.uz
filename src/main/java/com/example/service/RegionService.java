@@ -1,11 +1,9 @@
 package com.example.service;
 
 
-import com.example.dto.RegionDTO;
-import com.example.entity.ArticleTypeEntity;
+import com.example.dto.region.RegionDTO;
 import com.example.entity.RegionEntity;
 import com.example.exps.AppBadRequestException;
-import com.example.repository.ArticleTypeRepository;
 import com.example.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;

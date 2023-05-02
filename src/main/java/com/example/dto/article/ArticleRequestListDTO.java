@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ArticleRequestListDTO {
-    private List<Integer> idList;
+    private List<String> idList;
 
 }

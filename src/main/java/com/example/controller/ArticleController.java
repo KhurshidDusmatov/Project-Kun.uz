@@ -1,15 +1,12 @@
 package com.example.controller;
 
-import com.example.dto.article.ArticleDTO;
 import com.example.dto.article.ArticleRequestDTO;
 import com.example.dto.article.ArticleRequestListDTO;
 import com.example.dto.article.ArticleShortInfoDTO;
 import com.example.dto.jwt.JwtDTO;
-import com.example.entity.ArticleEntity;
 import com.example.enums.ArticleStatus;
 import com.example.enums.ProfileRole;
 import com.example.service.ArticleService;
-import com.example.service.AttachService;
 import com.example.util.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -26,8 +23,6 @@ import java.util.List;
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
-    private final AttachService attachService;
-
     @PostMapping({"", "/"})
     public ResponseEntity<?> create(@RequestBody @Valid ArticleRequestDTO dto,
                                     @RequestHeader("Authorization") String authorization) {
@@ -67,20 +62,51 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.getLastNByTypeId(typeId, limit));
     }
 
-    @GetMapping("/type/{id}")
-    public ResponseEntity<List<ArticleShortInfoDTO>> getLast8NotGivenList(@RequestBody List<String> list) {
-        return ResponseEntity.ok(articleService.getLast8NotGivenList(list));
+    @GetMapping("/get-last8")
+    public ResponseEntity<List<ArticleShortInfoDTO>> getLast8NotGivenList(@RequestBody ArticleRequestListDTO dto) {
+        return ResponseEntity.ok(articleService.getLast8NotGivenList(dto.getIdList()));
+    }
+    @GetMapping("/get-by-id-lang")
+    public ResponseEntity<?> getByIdAndLang(@RequestParam("id") String id, @RequestParam(
+            "language") String language) {
+        return ResponseEntity.ok(articleService.getByIdAndLanguage(id, language));
     }
 
-    public ArticleShortInfoDTO toArticleShortInfo(ArticleEntity entity) {
-        ArticleShortInfoDTO dto = new ArticleShortInfoDTO();
-        dto.setId(entity.getId());
-        dto.setTitle(entity.getTitle());
-        dto.setDescription(entity.getDescription());
-        dto.setPublishedDate(entity.getPublishedDate());
-        dto.setImage(attachService.getAttachLink(entity.getAttachId()));
-        return dto;
+    @GetMapping("/get-last-4")
+    public ResponseEntity<List<ArticleShortInfoDTO>> getLast4(@RequestParam("type-id") Integer typeId, @RequestParam("article-id") String articeleId) {
+        return ResponseEntity.ok(articleService.getLast4ByType(typeId, articeleId));
     }
+
+    @GetMapping("/get-most-read-articles")
+    public ResponseEntity<List<ArticleShortInfoDTO>> getMostReadArticles(@RequestParam("type-id") Integer typeId, @RequestParam("article-id") String articeleId) {
+        return ResponseEntity.ok(articleService.getMostReadArticles());
+    }
+
+    @GetMapping("/get-article-by-type-and-region")
+    public ResponseEntity<List<ArticleShortInfoDTO>> getArticleByTypeAndRegion(@RequestParam("type-id") Integer typeId, @RequestParam("region-id") Integer regionId) {
+        return ResponseEntity.ok(articleService.getArticleByTypeAndRegion(typeId, regionId));
+    }
+
+    @GetMapping(value = "/pagination-by-region")
+    public ResponseEntity<?> paginationByRegion(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                @RequestParam(value = "size", defaultValue = "4") int size,
+                                                @RequestParam("regionId") Integer regionId) {
+        Page<ArticleShortInfoDTO> pagination = articleService.paginationByRegion(page, size, regionId);
+        return ResponseEntity.ok(pagination);
+    }
+
+    @GetMapping("/get-article-by-category")
+    public ResponseEntity<List<ArticleShortInfoDTO>> getArticleByCategory(@RequestParam("category-id") Integer categoryId) {
+        return ResponseEntity.ok(articleService.getArticleByCategory(categoryId));
+    }
+    @GetMapping(value = "/pagination-by-category")
+    public ResponseEntity<?> paginationByCategory(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                 @RequestParam(value = "size", defaultValue = "4") int size,
+                                                 @RequestParam("categoryId") Integer categoryId) {
+        Page<ArticleShortInfoDTO> pagination = articleService.paginationByCategory(page, size, categoryId);
+        return ResponseEntity.ok(pagination);
+    }
+
 
     //    4 chi
 //    @PutMapping("/update2/{id}")

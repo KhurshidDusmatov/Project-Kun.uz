@@ -110,14 +110,14 @@ ADMIN, MODERATOR, PUBLISHER, USER
         ArticleShortInfo
     11. Get Last 4 Article By TagName (Bitta article ni eng ohirida chiqib turadi.)
         ArticleShortInfo
-    12. Get Last 5 Article By Types  And By Region Key
+    12. Get Last 5 Article By Types  And By Region Id
         ArticleShortInfo
-    13. Get Article list by Region Key
+    13. Get Article list by Region Id
      (Pagination)
         ArticleShortInfo
-    14. Get Last 5 Article Category Key
+    14. Get Last 5 Article Category Id
         ArticleShortInfo
-    15. Get Article By Category Key (Pagination)
+    15. Get Article By Category Id (Pagination)
         ArticleShortInfo
     16. Increase Article View Count by Article Id
           (article_id)

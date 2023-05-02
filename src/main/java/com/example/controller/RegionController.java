@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.jwt.JwtDTO;
-import com.example.dto.RegionDTO;
+import com.example.dto.region.RegionDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.RegionService;
 import com.example.util.JwtUtil;

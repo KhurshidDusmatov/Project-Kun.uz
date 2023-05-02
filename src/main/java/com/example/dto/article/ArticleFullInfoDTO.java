@@ -1,13 +1,10 @@
 package com.example.dto.article;
 
-import com.example.dto.CategoryDTO;
-import com.example.dto.RegionDTO;
-import com.example.enums.ArticleStatus;
+import com.example.dto.category.CategoryDTO;
+import com.example.dto.category.CategoryResponseDTO;
+import com.example.dto.region.RegionDTO;
+import com.example.dto.region.RegionResponseDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,8 +19,8 @@ public class ArticleFullInfoDTO {
     private String description;
     private String content;
     private Integer sharedCount;
-    private RegionDTO region;
-    private CategoryDTO category;
+    private RegionResponseDTO region;
+    private CategoryResponseDTO category;
     private LocalDateTime publishedDate;
     private Integer viewCount;
     private Integer likeCount;

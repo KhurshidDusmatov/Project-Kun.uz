@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.CategoryDTO;
+import com.example.dto.category.CategoryDTO;
 import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.CategoryService;

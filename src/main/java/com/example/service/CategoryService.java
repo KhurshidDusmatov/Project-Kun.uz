@@ -1,11 +1,10 @@
 package com.example.service;
 
 
-import com.example.dto.CategoryDTO;
+import com.example.dto.category.CategoryDTO;
 import com.example.entity.CategoryEntity;
 import com.example.exps.AppBadRequestException;
 import com.example.repository.CategoryRepository;
-import com.example.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;

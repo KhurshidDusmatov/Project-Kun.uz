@@ -4,16 +4,21 @@ import com.example.entity.ArticleEntity;
 import com.example.enums.ArticleStatus;
 import com.example.mapper.ArticleShortInfoMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface ArticleRepository extends CrudRepository<ArticleEntity,String> {
+public interface ArticleRepository extends CrudRepository<ArticleEntity,String>,
+        PagingAndSortingRepository<ArticleEntity, String> {
 
     @Transactional
     @Modifying
@@ -47,8 +52,17 @@ public interface ArticleRepository extends CrudRepository<ArticleEntity,String> 
 
     @Query("From ArticleEntity where status =:status and visible = true  order by createdDate desc")
     List<ArticleEntity> getAll(@Param("status") ArticleStatus status);
+    @Query("From ArticleEntity where id =:id and status =:status and visible = true ")
+    Optional<ArticleEntity> getById(@Param("id") String id, @Param("status") ArticleStatus status);
 
+    @Query("From ArticleEntity where status =:status and visible = true order by viewCount desc limit 4")
+    List<ArticleShortInfoMapper> get4ByMostRead(@Param("status") ArticleStatus status);
+    @Query("From ArticleEntity where typeId =: typeId and regionId =:regionId and  status =:status and visible = true order by createdDate desc limit 5")
+    List<ArticleShortInfoMapper> getAllByTypeAndRegion(@Param("typeId") Integer typeId, @Param("regionId") Integer regionId, @Param("status") ArticleStatus status);
+    Page<ArticleEntity> findAllByRegionId(Integer regionId, Pageable pageable);
 
+    @Query("From ArticleEntity where categoryId =:categoryId and status =:status and visible = true order by createdDate desc limit 5")
+    List<ArticleShortInfoMapper> getAllByCategory(@Param("categoryId") Integer categoryId, @Param("status") ArticleStatus status);
 
-
+    Page<ArticleEntity> findAllByCategoryId(Integer categoryId, Pageable pageable);
 }

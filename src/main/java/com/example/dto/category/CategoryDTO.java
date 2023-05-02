@@ -1,4 +1,4 @@
-package com.example.dto;
+package com.example.dto.category;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class RegionDTO {
+public class CategoryDTO {
     @NotNull
     @Positive
     private Integer id;

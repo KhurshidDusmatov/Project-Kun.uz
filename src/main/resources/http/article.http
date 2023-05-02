@@ -36,3 +36,14 @@ Content-Type:  application/json
 
 ### Get Top 5 article By TypeId
 GET localhost:8080/api/v1/article/type/2/five
+
+### Get Top 5 article By TypeId
+GET localhost:8080/api/v1/article/get-last8
+Content-Type: application/json
+
+{
+  "idList": ["444da53e-1808-4148-8842-25ea366f793a", "66c9ebbb-0f76-45a3-a20f-ec6223b20344", "07e78eba-f0bf-4a16-a0e7-63fdffa3659a"]
+}
+
+### Get by id and Language
+GET localhost:8080/api/v1/article/get-by-id-lang?id=2fdf43a8-858b-4547-822f-d37bdf58c01b&language=ru

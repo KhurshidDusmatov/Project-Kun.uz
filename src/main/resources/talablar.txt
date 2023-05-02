@@ -199,3 +199,11 @@ ADMIN, MODERATOR, PUBLISHER, USER
             (id, email,message,created_date)
 
        (!Should be limit for email sending. For 1 email 4 sms allowed during 1 minut. )
+Tag
+    1. Create  (MODERATOR,AMDIN)
+        (id,name)
+    2. Update by id (MODERATOR,ADMIN)
+       (id,name)
+    3. Delete by id (MODERATOR,ADMIN)
+    4. Get List (MODERATOR,ADMIN)
+         (id,name)

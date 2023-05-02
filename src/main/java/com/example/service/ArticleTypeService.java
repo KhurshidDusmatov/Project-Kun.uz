@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.dto.ArticleTypeDTO;
+import com.example.dto.article.ArticleTypeDTO;
 import com.example.entity.ArticleTypeEntity;
 import com.example.exps.AppBadRequestException;
 import com.example.repository.ArticleTypeRepository;

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ArticleShortInfoDTO {
+public class    ArticleShortInfoDTO {
     private String id;
     private String title;
     private String description;

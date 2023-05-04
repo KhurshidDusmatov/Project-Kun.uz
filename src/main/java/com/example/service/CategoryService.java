@@ -3,6 +3,7 @@ package com.example.service;
 
 import com.example.dto.category.CategoryDTO;
 import com.example.entity.CategoryEntity;
+import com.example.enums.LangEnum;
 import com.example.exps.AppBadRequestException;
 import com.example.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +74,22 @@ public class CategoryService {
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }
-    public List<CategoryDTO> getByLanguage(String language) {
-        return null;
+    public CategoryDTO getByIdAndLang(Integer id, LangEnum lang) {
+        CategoryEntity entity = get(id);
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(entity.getId());
+        switch (lang) {
+            case en -> {
+                dto.setName(entity.getNameEn());
+            }
+            case ru -> {
+                dto.setName(entity.getNameRu());
+            }
+            case uz -> {
+                dto.setName(entity.getNameUz());
+            }
+        }
+        return dto;
     }
     public List<CategoryDTO> getAll() {
         Iterable<CategoryEntity> iterable = categoryRepository.findAll();
@@ -85,4 +100,6 @@ public class CategoryService {
         });
         return dtos;
     }
+
+
 }

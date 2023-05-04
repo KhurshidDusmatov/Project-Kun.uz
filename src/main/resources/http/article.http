@@ -47,3 +47,7 @@ Content-Type: application/json
 
 ### Get by id and Language
 GET localhost:8080/api/v1/article/get-by-id-lang?id=2fdf43a8-858b-4547-822f-d37bdf58c01b&language=ru
+### Get by id
+GET localhost:8080/api/v1/article/2fdf43a8-858b-4547-822f-d37bdf58c01b
+Accept-Language: ru
+

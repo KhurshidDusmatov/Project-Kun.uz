@@ -2,7 +2,9 @@ package com.example.service;
 
 
 import com.example.dto.region.RegionDTO;
+import com.example.entity.CategoryEntity;
 import com.example.entity.RegionEntity;
+import com.example.enums.LangEnum;
 import com.example.exps.AppBadRequestException;
 import com.example.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +92,23 @@ public class RegionService {
             dtos.add(toDTO(regionEntity, dto));
         });
         return dtos;
+    }
+
+    public RegionDTO getByIdAndLang(Integer regionId, LangEnum lang) {
+        RegionEntity entity = get(regionId);
+        RegionDTO dto = new RegionDTO();
+        dto.setId(entity.getId());
+        switch (lang) {
+            case en -> {
+                dto.setName(entity.getNameEn());
+            }
+            case ru -> {
+                dto.setName(entity.getNameRu());
+            }
+            case uz -> {
+                dto.setName(entity.getNameUz());
+            }
+        }
+        return dto;
     }
 }

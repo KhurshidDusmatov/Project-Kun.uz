@@ -30,13 +30,13 @@ public class CommentController {
         return ResponseEntity.ok(commentService.create(dto, jwtDTO.getId()));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<String> update(@RequestParam("id") Integer id,
-                                         @RequestBody CommentUpdateRequestDTO dto,
-                                         @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(commentService.update(id, dto, jwtDTO.getId()));
-    }
+//    @PutMapping("/update")
+//    public ResponseEntity<String> update(@RequestParam("id") Integer id,
+//                                         @RequestBody CommentUpdateRequestDTO dto,
+//                                         @RequestHeader("Authorization") String authorization) {
+//        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
+//        return ResponseEntity.ok(commentService.update(id, dto, jwtDTO.getId(), jwtDTO.getRole()));
+//    }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") String id,
@@ -46,11 +46,11 @@ public class CommentController {
         return ResponseEntity.ok(commentService.delete(id, jwtDTO.getId()));
     }
 
-    @GetMapping(value = "/get-saved-articles")
-    public ResponseEntity<?> getAll(@RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN,
-                ProfileRole.MODERATOR, ProfileRole.USER,ProfileRole.PUBLISHER );
-        List<SavedArticleResponseDTO> list = commentService.getAll(jwtDTO.getId());
-        return ResponseEntity.ok(list);
-    }
+//    @GetMapping(value = "/get-saved-articles")
+//    public ResponseEntity<?> getAll(@RequestHeader("Authorization") String authorization) {
+//        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN,
+//                ProfileRole.MODERATOR, ProfileRole.USER,ProfileRole.PUBLISHER );
+//        List<SavedArticleResponseDTO> list = commentService.getAll(jwtDTO.getId());
+//        return ResponseEntity.ok(list);
+//    }
 }

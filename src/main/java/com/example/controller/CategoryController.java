@@ -45,11 +45,11 @@ public class CategoryController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping(value = "/get-by-language")
-    public ResponseEntity<?> getByLanguage(@RequestParam("language") String language) {
-        List<CategoryDTO> list = categoryService.getByLanguage(language);
-        return ResponseEntity.ok(list);
-    }
+//    @GetMapping(value = "/get-by-language")
+////    public ResponseEntity<?> getByLanguage(@RequestParam("language") String language) {
+////        List<CategoryDTO> list = categoryService.getByLanguage(language);
+////        return ResponseEntity.ok(list);
+////    }
 
 
 }

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "comment")
 public class CommentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "content", columnDefinition = "text")
     private String content;
@@ -20,7 +20,7 @@ public class CommentEntity {
     private Integer ownerId;
     @Column(name = "article_id")
     private String articleId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", insertable = false, updatable = false)
     private ArticleEntity article;
     @Column(name = "reply_id")

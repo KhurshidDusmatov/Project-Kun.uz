@@ -2,6 +2,8 @@ package com.example.service;
 
 import com.example.dto.article.ArticleTypeDTO;
 import com.example.entity.ArticleTypeEntity;
+import com.example.entity.CategoryEntity;
+import com.example.enums.LangEnum;
 import com.example.exps.AppBadRequestException;
 import com.example.repository.ArticleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +78,23 @@ public class ArticleTypeService {
 
     public List<ArticleTypeDTO> getByLanguage(String language) {
         return null;
+    }
+
+    public ArticleTypeDTO getByIdAndLang(Integer id, LangEnum lang) {
+        ArticleTypeEntity entity = get(id);
+        ArticleTypeDTO dto = new ArticleTypeDTO();
+        dto.setId(entity.getId());
+        switch (lang) {
+            case en -> {
+                dto.setName(entity.getNameEn());
+            }
+            case ru -> {
+                dto.setName(entity.getNameRu());
+            }
+            case uz -> {
+                dto.setName(entity.getNameUz());
+            }
+        }
+        return dto;
     }
 }

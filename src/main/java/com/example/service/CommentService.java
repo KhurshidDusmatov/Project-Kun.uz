@@ -1,10 +1,12 @@
 package com.example.service;
 
 import com.example.dto.CommentRequestDTO;
+import com.example.dto.CommentUpdateRequestDTO;
 import com.example.dto.savedArticle.SavedArticleRequestDTO;
 import com.example.dto.savedArticle.SavedArticleResponseDTO;
 import com.example.entity.CommentEntity;
 import com.example.entity.SavedArticleEntity;
+import com.example.enums.ProfileRole;
 import com.example.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,16 +30,20 @@ public class CommentService {
         return dto;
     }
     public Boolean delete(String articleId, Integer ownerId) {
-        savedArticleRepository.deleteSavedArticle(articleId, ownerId);
+//        commentRepository.deleteSavedArticle(articleId, ownerId);
         return true;
     }
 
-    public List<SavedArticleResponseDTO> getAll(Integer ownerId) {
-        List<SavedArticleEntity> all = savedArticleRepository.getAll(ownerId);
-        List<SavedArticleResponseDTO> dtos = new ArrayList<>();
-        all.forEach(savedArticleEntity -> {
-            dtos.add(toDTO(savedArticleEntity));
-        });
-        return dtos;
+//    public List<SavedArticleResponseDTO> getAll(Integer ownerId) {
+////        List<SavedArticleEntity> all = commentRepository.getAll(ownerId);
+//        List<SavedArticleResponseDTO> dtos = new ArrayList<>();
+//        all.forEach(savedArticleEntity -> {
+//            dtos.add(toDTO(savedArticleEntity));
+//        });
+//        return dtos;
+//    }
+
+    public Object update(Integer id, CommentUpdateRequestDTO dto, Integer id1, ProfileRole role) {
+        return null;
     }
 }

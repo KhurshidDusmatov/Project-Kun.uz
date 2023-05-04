@@ -1,10 +1,12 @@
 package com.example.controller;
 
+import com.example.dto.article.ArticleFullInfoDTO;
 import com.example.dto.article.ArticleRequestDTO;
 import com.example.dto.article.ArticleRequestListDTO;
 import com.example.dto.article.ArticleShortInfoDTO;
 import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ArticleStatus;
+import com.example.enums.LangEnum;
 import com.example.enums.ProfileRole;
 import com.example.service.ArticleService;
 import com.example.util.JwtUtil;
@@ -23,6 +25,7 @@ import java.util.List;
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
+
     @PostMapping({"", "/"})
     public ResponseEntity<?> create(@RequestBody @Valid ArticleRequestDTO dto,
                                     @RequestHeader("Authorization") String authorization) {
@@ -52,42 +55,43 @@ public class ArticleController {
         JwtDTO jwt = JwtUtil.getJwtDTO(authorization, ProfileRole.PUBLISHER);
         return ResponseEntity.ok(articleService.changeStatus(ArticleStatus.valueOf(status), id, jwt.getId()));
     }
-    @GetMapping("/type/{id}/five")
+
+    @PostMapping("/type/{id}/five")
     public ResponseEntity<List<ArticleShortInfoDTO>> get5ByTypeId(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(articleService.getLast5ByTypeId(id));
     }
 
-    @GetMapping("/type/{id}")
+    @PostMapping("/type/{id}")
     public ResponseEntity<List<ArticleShortInfoDTO>> getNByTypeId(@PathVariable("id") Integer typeId, @RequestParam("limit") Integer limit) {
         return ResponseEntity.ok(articleService.getLastNByTypeId(typeId, limit));
     }
 
-    @GetMapping("/get-last8")
-    public ResponseEntity<List<ArticleShortInfoDTO>> getLast8NotGivenList(@RequestBody ArticleRequestListDTO dto) {
+    @PostMapping("/get-last8")
+    public ResponseEntity<List<ArticleShortInfoDTO>> get8ExceptList(@RequestBody ArticleRequestListDTO dto) {
         return ResponseEntity.ok(articleService.getLast8NotGivenList(dto.getIdList()));
     }
-    @GetMapping("/get-by-id-lang")
-    public ResponseEntity<?> getByIdAndLang(@RequestParam("id") String id, @RequestParam(
-            "language") String language) {
-        return ResponseEntity.ok(articleService.getByIdAndLanguage(id, language));
-    }
 
-    @GetMapping("/get-last-4")
+    @GetMapping("/{id}")
+    public ResponseEntity<ArticleFullInfoDTO> getById(@PathVariable("id") String id,
+                                                      @RequestHeader(value = "Accept-Language", defaultValue = "uz", required = false) LangEnum lang) {
+        return ResponseEntity.ok(articleService.getById(id, lang));
+    }
+    @PostMapping("/get-last-4")
     public ResponseEntity<List<ArticleShortInfoDTO>> getLast4(@RequestParam("type-id") Integer typeId, @RequestParam("article-id") String articeleId) {
         return ResponseEntity.ok(articleService.getLast4ByType(typeId, articeleId));
     }
 
-    @GetMapping("/get-most-read-articles")
+    @PostMapping("/get-most-read-articles")
     public ResponseEntity<List<ArticleShortInfoDTO>> getMostReadArticles(@RequestParam("type-id") Integer typeId, @RequestParam("article-id") String articeleId) {
         return ResponseEntity.ok(articleService.getMostReadArticles());
     }
 
-    @GetMapping("/get-article-by-type-and-region")
+    @PostMapping("/get-article-by-type-and-region")
     public ResponseEntity<List<ArticleShortInfoDTO>> getArticleByTypeAndRegion(@RequestParam("type-id") Integer typeId, @RequestParam("region-id") Integer regionId) {
         return ResponseEntity.ok(articleService.getArticleByTypeAndRegion(typeId, regionId));
     }
 
-    @GetMapping(value = "/pagination-by-region")
+    @PostMapping(value = "/pagination-by-region")
     public ResponseEntity<?> paginationByRegion(@RequestParam(value = "page", defaultValue = "1") int page,
                                                 @RequestParam(value = "size", defaultValue = "4") int size,
                                                 @RequestParam("regionId") Integer regionId) {
@@ -95,34 +99,17 @@ public class ArticleController {
         return ResponseEntity.ok(pagination);
     }
 
-    @GetMapping("/get-article-by-category")
+    @PostMapping("/get-article-by-category")
     public ResponseEntity<List<ArticleShortInfoDTO>> getArticleByCategory(@RequestParam("category-id") Integer categoryId) {
         return ResponseEntity.ok(articleService.getArticleByCategory(categoryId));
     }
-    @GetMapping(value = "/pagination-by-category")
+
+    @PostMapping(value = "/pagination-by-category")
     public ResponseEntity<?> paginationByCategory(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                 @RequestParam(value = "size", defaultValue = "4") int size,
-                                                 @RequestParam("categoryId") Integer categoryId) {
+                                                  @RequestParam(value = "size", defaultValue = "4") int size,
+                                                  @RequestParam("categoryId") Integer categoryId) {
         Page<ArticleShortInfoDTO> pagination = articleService.paginationByCategory(page, size, categoryId);
         return ResponseEntity.ok(pagination);
     }
-
-
-    //    4 chi
-//    @PutMapping("/update2/{id}")
-//    public ResponseEntity<Boolean> update2(@PathVariable("id") String id, @RequestBody ArticleDTO dto,
-//                                           @RequestHeader("Authorization") String authorization) {
-//        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-//        return ResponseEntity.ok(service.update2(id, dto));
-//    }
-
-
-//    @GetMapping("/pagination")
-//    public ResponseEntity<Page<ArticleEntity>> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
-//                                                          @RequestParam(value = "size", defaultValue = "6") int size,
-//                                                          @RequestHeader("Authorization") String authorization) {
-//        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
-//        return ResponseEntity.ok(service.getAll(page, size));
-//    }
 
 }

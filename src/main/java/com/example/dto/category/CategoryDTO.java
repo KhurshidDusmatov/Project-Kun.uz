@@ -1,5 +1,6 @@
 package com.example.dto.category;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CategoryDTO {
     @NotNull
     @Positive
@@ -25,5 +27,6 @@ public class CategoryDTO {
     private String nameEn;
     private Boolean visible;
     private LocalDateTime createdDate;
+    private String name;
 
 }

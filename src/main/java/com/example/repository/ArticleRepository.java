@@ -56,13 +56,19 @@ public interface ArticleRepository extends CrudRepository<ArticleEntity,String>,
     Optional<ArticleEntity> getById(@Param("id") String id, @Param("status") ArticleStatus status);
 
     @Query("From ArticleEntity where status =:status and visible = true order by viewCount desc limit 4")
-    List<ArticleShortInfoMapper> get4ByMostRead(@Param("status") ArticleStatus status);
-    @Query("From ArticleEntity where typeId =: typeId and regionId =:regionId and  status =:status and visible = true order by createdDate desc limit 5")
-    List<ArticleShortInfoMapper> getAllByTypeAndRegion(@Param("typeId") Integer typeId, @Param("regionId") Integer regionId, @Param("status") ArticleStatus status);
+    List<ArticleEntity> get4ByMostRead(@Param("status") ArticleStatus status);
+
+    @Query("From ArticleEntity where typeId =:typeId and regionId =:regionId and  status =:status and visible = true order by createdDate desc limit 5")
+    List<ArticleEntity> getAllByTypeAndRegion(@Param("typeId") Integer typeId, @Param("regionId") Integer regionId, @Param("status") ArticleStatus status);
     Page<ArticleEntity> findAllByRegionId(Integer regionId, Pageable pageable);
 
     @Query("From ArticleEntity where categoryId =:categoryId and status =:status and visible = true order by createdDate desc limit 5")
-    List<ArticleShortInfoMapper> getAllByCategory(@Param("categoryId") Integer categoryId, @Param("status") ArticleStatus status);
+    List<ArticleEntity> getAllByCategory(@Param("categoryId") Integer categoryId, @Param("status") ArticleStatus status);
 
     Page<ArticleEntity> findAllByCategoryId(Integer categoryId, Pageable pageable);
+
+    @Query("From ArticleEntity where status =:status and visible = true and id not in :list order by createdDate desc limit 8")
+    List<ArticleEntity> get8ByExceptList(@Param("status") ArticleStatus status,
+                                         @Param("list") List<String> idList);
+
 }

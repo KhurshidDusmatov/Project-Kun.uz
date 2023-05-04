@@ -3,21 +3,19 @@ package com.example.service;
 import com.example.dto.article.ArticleFullInfoDTO;
 import com.example.dto.article.ArticleRequestDTO;
 import com.example.dto.article.ArticleShortInfoDTO;
-import com.example.dto.category.CategoryResponseDTO;
-import com.example.dto.region.RegionResponseDTO;
 import com.example.entity.*;
 import com.example.enums.ArticleStatus;
+import com.example.enums.LangEnum;
+import com.example.exps.AppBadRequestException;
 import com.example.exps.ItemNotFoundException;
-import com.example.exps.MethodNotAllowedException;
 import com.example.mapper.ArticleShortInfoMapper;
 import com.example.repository.ArticleRepository;
-import com.example.repository.CategoryRepository;
-import com.example.repository.RegionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.parser.Entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,17 +23,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ArticleService {
-
     @Autowired
     private ArticleRepository articleRepository;
-    private final AttachService attachService;
-    private final RegionRepository regionRepository;
-    private final CategoryRepository categoryRepository;
-    private final ProfileService profileService;
-    private final RegionService regionService;
-    private final CategoryService categoryService;
+    @Autowired
+    private AttachService attachService;
+    @Autowired
+    private ArticleTypeService articleTypeService;
+    @Autowired
+    private RegionService regionService;
+    @Autowired
+    private CategoryService categoryService;
 
 
     public ArticleRequestDTO create(ArticleRequestDTO dto, Integer moderId) {
@@ -142,85 +140,36 @@ public class ArticleService {
     }
 
     public List<ArticleShortInfoDTO> getLast8NotGivenList(List<String> list) {
-        List<ArticleEntity> all = articleRepository.getAll(ArticleStatus.PUBLISHED);
+        List<ArticleEntity> all = articleRepository.get8ByExceptList(ArticleStatus.PUBLISHED, list);
         List<ArticleShortInfoDTO> result = new ArrayList<>();
-        for (String id : list) {
-            for (ArticleEntity articleEntity : all) {
-                if (!articleEntity.getId().equals(id)){
-                    result.add(toArticleShortInfo(articleEntity));
-                }else {
-                    break;
-                }
-                if (result.size()==8) break;
-            }
-            if (result.size()==8) break;
-        }
+        all.forEach(entity -> {
+            result.add(toArticleShortInfo(entity));
+        });
         return result;
     }
-    public ArticleFullInfoDTO getByIdAndLanguage(String id, String language) {
-        Optional<ArticleEntity> optional = articleRepository.getById(id, ArticleStatus.PUBLISHED);
-        if (optional.isEmpty()) {
-            throw new ItemNotFoundException("Article not found");
+
+   public ArticleFullInfoDTO getById(String id, LangEnum langEnum) {
+        ArticleEntity entity = get(id);
+        if (!entity.getVisible() || !entity.getStatus().equals(ArticleStatus.PUBLISHED)) {
+            throw new AppBadRequestException("Wrong article status");
         }
-        ArticleEntity entity= optional.get();
-        switch (language){
-            case "uz"->{
-                RegionEntity region = regionService.get(entity.getRegionId());
-                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
-                regionResponseDTO.setId(region.getId());
-                regionResponseDTO.setName(region.getNameUz());
-
-                CategoryEntity category = categoryService.get(entity.getCategoryId());
-                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
-                categoryResponseDTO.setId(category.getId());
-                categoryResponseDTO.setName(category.getNameUz());
-                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
-            }case "ru"->{
-                RegionEntity region = regionService.get(entity.getRegionId());
-                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
-                regionResponseDTO.setId(region.getId());
-                regionResponseDTO.setName(region.getNameRu());
-
-                CategoryEntity category = categoryService.get(entity.getCategoryId());
-                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
-                categoryResponseDTO.setId(category.getId());
-                categoryResponseDTO.setName(category.getNameRu());
-                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
-            }case "eng"->{
-                RegionEntity region = regionService.get(entity.getRegionId());
-                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
-                regionResponseDTO.setId(region.getId());
-                regionResponseDTO.setName(region.getNameEn());
-
-                CategoryEntity category = categoryService.get(entity.getCategoryId());
-                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
-                categoryResponseDTO.setId(category.getId());
-                categoryResponseDTO.setName(category.getNameEn());
-                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
-            }
-            default -> {
-                throw new MethodNotAllowedException("Language not found");
-            }
-        }
+        return toFullDTO(entity, langEnum);
     }
-
-     public ArticleFullInfoDTO toFullInfoDTO(ArticleEntity entity,
-                                             RegionResponseDTO regionResponseDTO,
-                                             CategoryResponseDTO categoryResponseDTO){
-
-         ArticleFullInfoDTO dto = new ArticleFullInfoDTO();
-         dto.setId(entity.getId());
-         dto.setTitle(entity.getTitle());
-         dto.setDescription(entity.getDescription());
-         dto.setContent(entity.getContent());
-         dto.setRegion(regionResponseDTO);
-         dto.setCategory(categoryResponseDTO);
-         dto.setPublishedDate(entity.getPublishedDate());
-         dto.setSharedCount(entity.getSharedCount());
-         dto.setViewCount(entity.getViewCount());
-//         dto.setLikeCount(entity.getLikeCount());
-         return dto;
-     }
+    public ArticleFullInfoDTO toFullDTO(ArticleEntity entity, LangEnum langEnum) {
+        ArticleFullInfoDTO dto = new ArticleFullInfoDTO();
+        dto.setId(entity.getId());
+        dto.setTitle(entity.getTitle());
+        dto.setDescription(entity.getDescription());
+        dto.setContent(entity.getContent());
+        dto.setPublishedDate(entity.getPublishedDate());
+        dto.setViewCount(entity.getViewCount());
+        dto.setImage(attachService.getAttachLink(entity.getAttachId()));
+        dto.setCategory(categoryService.getByIdAndLang(entity.getCategoryId(), langEnum));
+        dto.setRegion(regionService.getByIdAndLang(entity.getCategoryId(), langEnum));
+        dto.setArticleType(articleTypeService.getByIdAndLang(entity.getCategoryId(), langEnum));
+        // tag_list
+        return dto;
+    }
 
      public List<ArticleShortInfoDTO> getLast4ByType(Integer typeId, String articleId){
          List<ArticleShortInfoDTO> last5ByTypeId = getLast5ByTypeId(typeId);
@@ -235,7 +184,7 @@ public class ArticleService {
 
 
     public List<ArticleShortInfoDTO> getMostReadArticles() {
-        List<ArticleShortInfoMapper> entityList = articleRepository.get4ByMostRead(
+        List<ArticleEntity> entityList = articleRepository.get4ByMostRead(
                 ArticleStatus.PUBLISHED);
         List<ArticleShortInfoDTO> dtoList = new LinkedList<>();
         entityList.forEach(entity -> {
@@ -245,7 +194,7 @@ public class ArticleService {
     }
 
     public List<ArticleShortInfoDTO> getArticleByTypeAndRegion(Integer typeId, Integer regionId) {
-        List<ArticleShortInfoMapper> all = articleRepository.getAllByTypeAndRegion(
+        List<ArticleEntity> all = articleRepository.getAllByTypeAndRegion(
                 typeId,
                 regionId,
                 ArticleStatus.PUBLISHED);
@@ -270,7 +219,7 @@ public class ArticleService {
     }
 
     public List<ArticleShortInfoDTO> getArticleByCategory(Integer categoryId) {
-        List<ArticleShortInfoMapper> all = articleRepository.getAllByCategory(
+        List<ArticleEntity> all = articleRepository.getAllByCategory(
                 categoryId,
                 ArticleStatus.PUBLISHED);
 
@@ -292,6 +241,71 @@ public class ArticleService {
         });
         return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
     }
+
+    //    public ArticleFullInfoDTO getByIdAndLanguage(String id, String language) {
+//        Optional<ArticleEntity> optional = articleRepository.getById(id, ArticleStatus.PUBLISHED);
+//        if (optional.isEmpty()) {
+//            throw new ItemNotFoundException("Article not found");
+//        }
+//        ArticleEntity entity= optional.get();
+//        switch (language){
+//            case "uz"->{
+//                RegionEntity region = regionService.get(entity.getRegionId());
+//                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
+//                regionResponseDTO.setId(region.getId());
+//                regionResponseDTO.setName(region.getNameUz());
+//
+//                CategoryEntity category = categoryService.get(entity.getCategoryId());
+//                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
+//                categoryResponseDTO.setId(category.getId());
+//                categoryResponseDTO.setName(category.getNameUz());
+//                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
+//            }case "ru"->{
+//                RegionEntity region = regionService.get(entity.getRegionId());
+//                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
+//                regionResponseDTO.setId(region.getId());
+//                regionResponseDTO.setName(region.getNameRu());
+//
+//                CategoryEntity category = categoryService.get(entity.getCategoryId());
+//                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
+//                categoryResponseDTO.setId(category.getId());
+//                categoryResponseDTO.setName(category.getNameRu());
+//                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
+//            }case "eng"->{
+//                RegionEntity region = regionService.get(entity.getRegionId());
+//                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
+//                regionResponseDTO.setId(region.getId());
+//                regionResponseDTO.setName(region.getNameEn());
+//
+//                CategoryEntity category = categoryService.get(entity.getCategoryId());
+//                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
+//                categoryResponseDTO.setId(category.getId());
+//                categoryResponseDTO.setName(category.getNameEn());
+//                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
+//            }
+//            default -> {
+//                throw new MethodNotAllowedException("Language not found");
+//            }
+//        }
+//    }
+//
+//     public ArticleFullInfoDTO toFullInfoDTO(ArticleEntity entity,
+//                                             RegionResponseDTO regionResponseDTO,
+//                                             CategoryResponseDTO categoryResponseDTO){
+//
+//         ArticleFullInfoDTO dto = new ArticleFullInfoDTO();
+//         dto.setId(entity.getId());
+//         dto.setTitle(entity.getTitle());
+//         dto.setDescription(entity.getDescription());
+//         dto.setContent(entity.getContent());
+//         dto.setRegion(regionResponseDTO);
+//         dto.setCategory(categoryResponseDTO);
+//         dto.setPublishedDate(entity.getPublishedDate());
+//         dto.setSharedCount(entity.getSharedCount());
+//         dto.setViewCount(entity.getViewCount());
+////         dto.setLikeCount(entity.getLikeCount());
+//         return dto;
+//     }
 
 
     //    public ArticleDTO create(ArticleDTO dto) {

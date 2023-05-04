@@ -193,6 +193,7 @@ ADMIN, MODERATOR, PUBLISHER, USER
     1. Create EmailHistory when email is send using application. (No need create api)
     2. Get EmailHistory by email
             (id, email,message,created_date)
+
     3. Get EmailHistory  by given date
             (id, email,message,created_date)
     4. Pagination (ADMIN)

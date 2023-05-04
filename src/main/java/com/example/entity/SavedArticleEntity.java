@@ -10,13 +10,11 @@ import lombok.Setter;
 @Table(name = "saved_article")
 public class SavedArticleEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "owner_id")
     private Integer ownerId;
-    @Column(name = "article_id")
-    private String articleId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", insertable = false, updatable = false)
     private ArticleEntity article;
 

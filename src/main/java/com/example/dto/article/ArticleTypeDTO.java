@@ -1,5 +1,6 @@
 package com.example.dto.article;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ArticleTypeDTO {
 
     @NotNull
@@ -25,5 +27,6 @@ public class ArticleTypeDTO {
     @Size(min = 2, max = 225, message = "Item must be between 2 and 225 characters")
     private String nameEn;
     private LocalDateTime createdDate;
+    private String name;
 
 }

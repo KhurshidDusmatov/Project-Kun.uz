@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.article.ArticleFilterDTO;
 import com.example.dto.article.ArticleFullInfoDTO;
 import com.example.dto.article.ArticleRequestDTO;
 import com.example.dto.article.ArticleShortInfoDTO;
@@ -9,6 +10,7 @@ import com.example.enums.LangEnum;
 import com.example.exps.AppBadRequestException;
 import com.example.exps.ItemNotFoundException;
 import com.example.mapper.ArticleShortInfoMapper;
+import com.example.repository.ArticleCustomRepository;
 import com.example.repository.ArticleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class ArticleService {
     private RegionService regionService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ArticleCustomRepository articleCustomRepository;
 
 
     public ArticleRequestDTO create(ArticleRequestDTO dto, Integer moderId) {
@@ -240,6 +244,15 @@ public class ArticleService {
             dtos.add(toArticleShortInfo(entity));
         });
         return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
+    }
+
+    public PageImpl<ArticleShortInfoDTO> filter(ArticleFilterDTO filterDTO, int page, int size) {
+        Page<ArticleEntity> pageObj = articleCustomRepository.filter(filterDTO, page, size);
+        List<ArticleShortInfoDTO> dtoList = new LinkedList<>();
+        pageObj.forEach(entity -> {
+            dtoList.add(toArticleShortInfo(entity));
+        });
+        return new PageImpl<>(dtoList, PageRequest.of(page, size), pageObj.getTotalElements());
     }
 
     //    public ArticleFullInfoDTO getByIdAndLanguage(String id, String language) {

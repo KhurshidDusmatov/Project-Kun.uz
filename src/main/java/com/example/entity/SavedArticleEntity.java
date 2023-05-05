@@ -14,6 +14,9 @@ public class SavedArticleEntity {
     private Integer id;
     @Column(name = "owner_id")
     private Integer ownerId;
+
+    @Column(name = "article_id")
+    private String articleId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", insertable = false, updatable = false)
     private ArticleEntity article;

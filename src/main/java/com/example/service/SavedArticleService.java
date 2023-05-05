@@ -3,7 +3,6 @@ package com.example.service;
 import com.example.dto.article.ArticleShortInfoDTO;
 import com.example.dto.savedArticle.SavedArticleRequestDTO;
 import com.example.dto.savedArticle.SavedArticleResponseDTO;
-import com.example.entity.ArticleEntity;
 import com.example.entity.SavedArticleEntity;
 import com.example.repository.SavedArticleRepository;
 import lombok.AllArgsConstructor;

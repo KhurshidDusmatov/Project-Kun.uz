@@ -1,9 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.article.ArticleFullInfoDTO;
-import com.example.dto.article.ArticleRequestDTO;
-import com.example.dto.article.ArticleRequestListDTO;
-import com.example.dto.article.ArticleShortInfoDTO;
+import com.example.dto.article.*;
 import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ArticleStatus;
 import com.example.enums.LangEnum;
@@ -110,6 +107,13 @@ public class ArticleController {
                                                   @RequestParam("categoryId") Integer categoryId) {
         Page<ArticleShortInfoDTO> pagination = articleService.paginationByCategory(page, size, categoryId);
         return ResponseEntity.ok(pagination);
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<Page<ArticleShortInfoDTO>> filter(@RequestBody ArticleFilterDTO dto,
+                                                            @RequestParam(value = "page", defaultValue = "1") int page,
+                                                            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return ResponseEntity.ok(articleService.filter(dto, page, size));
     }
 
 }

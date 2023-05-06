@@ -29,6 +29,7 @@ public class EmailHistoryController {
         List<EmailHistoryDTO> list = emailHistoryService.getByCreatedDate(dateTime);
         return ResponseEntity.ok(list);
     }
+
     @GetMapping(value = "/pagination")
     public ResponseEntity<?> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "4") int size,

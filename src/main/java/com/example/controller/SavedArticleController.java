@@ -31,7 +31,6 @@ public class SavedArticleController {
         return ResponseEntity.ok(savedArticleService.create(dto, jwtDTO.getId()));
     }
 
-
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") String id,
                                           @RequestHeader("Authorization") String authorization) {

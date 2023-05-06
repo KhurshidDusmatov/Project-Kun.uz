@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.dto.profile.ProfileDTO;
+import com.example.dto.profile.ProfileShortInfoDTO;
 import com.example.dto.profile.ProfileUpdateDTO;
 import com.example.dto.filter.ProfileFilterRequestDTO;
 import com.example.entity.AttachEntity;
@@ -97,13 +98,13 @@ public class ProfileService {
         List<ProfileEntity> entities = entityPage.getContent();
         List<ProfileDTO> dtos = new LinkedList<>();
         entities.forEach(entity -> {
-            ProfileDTO dto = new ProfileDTO();
-            dtos.add(toDTO(entity, dto));
+            dtos.add(toDTO(entity));
         });
         return new PageImpl<>(dtos, pageable, entityPage.getTotalElements());
     }
 
-    private ProfileDTO toDTO(ProfileEntity entity, ProfileDTO dto) {
+    public ProfileDTO toDTO(ProfileEntity entity) {
+        ProfileDTO dto = new ProfileDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setSurname(entity.getSurname());
@@ -111,6 +112,14 @@ public class ProfileService {
         dto.setPhone(entity.getPhone());
         dto.setPassword(entity.getPassword());
         dto.setRole(entity.getRole());
+        return dto;
+    }
+
+    public ProfileShortInfoDTO toShortInfo(ProfileEntity entity) {
+        ProfileShortInfoDTO dto = new ProfileShortInfoDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setSurname(entity.getSurname());
         return dto;
     }
 
@@ -127,7 +136,7 @@ public class ProfileService {
         List<ProfileDTO> dtos = new ArrayList<>();
         entities.forEach(entity -> {
             ProfileDTO dto = new ProfileDTO();
-            dtos.add(toDTO(entity, dto));
+            dtos.add(toDTO(entity));
         });
         return dtos;
     }

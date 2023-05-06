@@ -17,28 +17,26 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
     @PostMapping({"", "/"})
     public ResponseEntity<CategoryDTO> create(@RequestBody CategoryDTO dto,
                                               @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(categoryService.create(dto, jwtDTO.getId()));
     }
-
     @PutMapping("/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
-                                             @RequestBody CategoryDTO dto,
-                                             @RequestHeader("Authorization") String authorization) {
+                                         @RequestBody CategoryDTO dto,
+                                         @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(categoryService.update(id, dto, jwtDTO.getId()));
     }
-
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
-                                         @RequestHeader("Authorization") String authorization) {
+                                          @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(categoryService.delete(id, jwtDTO.getId()));
     }
-
     @GetMapping(value = "/get-all")
     public ResponseEntity<?> getAll() {
         List<CategoryDTO> list = categoryService.getAll();

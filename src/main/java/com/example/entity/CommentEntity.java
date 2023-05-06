@@ -18,6 +18,10 @@ public class CommentEntity {
     private String content;
     @Column(name = "owner_id")
     private Integer ownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+    private ProfileEntity owner;
+
     @Column(name = "article_id")
     private String articleId;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,9 +29,10 @@ public class CommentEntity {
     private ArticleEntity article;
     @Column(name = "reply_id")
     private Integer replyId;
+    @Column(name = "visible")
+    private Boolean visible;
     @Column(name = "created_date")
     private LocalDateTime createdDate;
-
-
-
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
 }

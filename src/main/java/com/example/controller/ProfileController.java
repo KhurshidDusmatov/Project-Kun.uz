@@ -49,11 +49,6 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.delete(id, jwtDTO.getId()));
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<ProfileDTO>> getAll() {
-        return null;
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<ProfileDTO> getById(@PathVariable("id") Integer id) {
         return null;
@@ -84,4 +79,10 @@ public class ProfileController {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
         return ResponseEntity.ok(profileService.updatePhotoId(fileName, jwtDTO.getId()));
     }
+
+    @GetMapping("")
+    public ResponseEntity<List<ProfileDTO>> getAll() {
+        return null;
+    }
+
 }

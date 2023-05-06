@@ -35,4 +35,9 @@ public class CommentEntity {
     private LocalDateTime createdDate;
     @Column(name = "update_date")
     private LocalDateTime updateDate;
+
+    @Column(name = "like_count")
+    private Integer likeCount;
+    @Column(name = "dislike_count")
+    private Integer dislikeCount;
 }

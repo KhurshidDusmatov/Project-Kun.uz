@@ -1,15 +1,10 @@
 package com.example.service;
 
-import com.example.dto.article.ArticleFilterDTO;
-import com.example.dto.article.ArticleShortInfoDTO;
 import com.example.dto.comment.CommentFilterDTO;
 import com.example.dto.comment.CommentRequestDTO;
 import com.example.dto.comment.CommentUpdateRequestDTO;
 import com.example.dto.comment.CommentResponseDTO;
-import com.example.dto.profile.ProfileDTO;
-import com.example.entity.ArticleEntity;
 import com.example.entity.CommentEntity;
-import com.example.entity.ProfileEntity;
 import com.example.enums.ProfileRole;
 import com.example.exps.ItemNotFoundException;
 import com.example.exps.MethodNotAllowedException;

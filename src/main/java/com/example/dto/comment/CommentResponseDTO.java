@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentResponseDTO {
-    private Integer id;
-    private LocalDateTime createdDate;
-    private LocalDateTime updateDate;
-    private ProfileShortInfoDTO profile;
-    private String content;
-    private ArticleShortInfoDTO article;
-    private Integer replyId;
+        private Integer id;
+        private LocalDateTime createdDate;
+        private LocalDateTime updateDate;
+        private ProfileShortInfoDTO profile;
+        private String content;
+        private ArticleShortInfoDTO article;
+        private Integer replyId;
 }
 

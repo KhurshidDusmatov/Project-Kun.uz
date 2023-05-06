@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.enums.EmotionStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +26,7 @@ public class ArticleLikeEntity {
     private ArticleEntity article;
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
-//    @Column(name = "status")
-//    @Enumerated(EnumType.STRING)
-//    private EmotionStatus status;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private EmotionStatus status;
 }

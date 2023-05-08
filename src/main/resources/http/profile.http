@@ -1,14 +1,14 @@
 ### Create profle
-POST localhost:8080/api/v1/profile
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODE4MjI2MTYsImlkIjoyLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODE5MDkwMTYsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.UFjFzJxKOkY2JoDwVsRc4WZh7uNNjSHIOXuzg4ft_Jkj53fVt7dJIYtrt-SyY4RrgmG37FjaKdRs7JN7Cv-R-w
+POST localhost:8080/api/v1/profile/private
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODM1NzA1MDIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODM2NTY5MDIsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.J4hGviDluxkQEKhqJExhtllUTqHwOpc_OTVO9BgIFlDWSfdwk5QF3ehf-L82mZBRrjJd4inGkzcnSWld5SEQlw
 Content-Type:  application/json
 
 {
-  "name": "Aaa",
+  "name": "Alijon",
   "surname": "Soliyev",
-  "email": "aaa@mail.ru",
-  "phone": "0000",
-  "password": "1234",
+  "email": "alijonSoliyev@mail.ru",
+  "phone": "+998990001122",
+  "password": "88888888",
   "role": "MODERATOR"
 }
 

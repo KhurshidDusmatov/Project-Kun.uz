@@ -13,11 +13,9 @@ import com.example.mapper.ArticleShortInfoMapper;
 import com.example.repository.ArticleCustomRepository;
 import com.example.repository.ArticleRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.parser.Entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,27 +23,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ArticleService {
-    @Autowired
-    private ArticleRepository articleRepository;
-    @Autowired
-    private AttachService attachService;
-    @Autowired
-    private ArticleTypeService articleTypeService;
-    @Autowired
-    private RegionService regionService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private ArticleCustomRepository articleCustomRepository;
+    private final ArticleRepository articleRepository;
+    private final AttachService attachService;
+    private final ArticleTypeService articleTypeService;
+    private final RegionService regionService;
+    private final CategoryService categoryService;
+    private final ArticleCustomRepository articleCustomRepository;
 
 
     public ArticleRequestDTO create(ArticleRequestDTO dto, Integer moderId) {
-        // check
-//        ProfileEntity moderator = profileService.get(moderId);
-//        RegionEntity region = regionService.get(dto.getRegionId());
-//        CategoryEntity category = categoryService.get(dto.getCategoryId());
-
         ArticleEntity entity = new ArticleEntity();
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
@@ -55,8 +43,8 @@ public class ArticleService {
         entity.setCategoryId(dto.getCategoryId());
         entity.setTypeId(dto.getArticleTypeId());
         entity.setAttachId(dto.getAttachId());
-        // type
         articleRepository.save(entity);
+        dto.setId(entity.getId());
         return dto;
     }
 
@@ -74,8 +62,8 @@ public class ArticleService {
         return dto;
     }
 
-    public Boolean delete(String  id) {
-      articleRepository.deleteArticle(id);
+    public Boolean delete(String id) {
+        articleRepository.deleteArticle(id);
         return true;
     }
 
@@ -110,6 +98,7 @@ public class ArticleService {
         dto.setImage(attachService.getAttachLink(entity.getAttachId()));
         return dto;
     }
+
     public ArticleShortInfoDTO toArticleShortInfo(ArticleShortInfoMapper entity) {
         ArticleShortInfoDTO dto = new ArticleShortInfoDTO();
         dto.setId(entity.getId());
@@ -131,6 +120,7 @@ public class ArticleService {
         });
         return dtoList;
     }
+
     public List<ArticleShortInfoDTO> getLastNByTypeId(Integer typeId, Integer limit) {
         List<ArticleShortInfoMapper> entityList = articleRepository.getTopN(
                 typeId,
@@ -152,13 +142,14 @@ public class ArticleService {
         return result;
     }
 
-   public ArticleFullInfoDTO getById(String id, LangEnum langEnum) {
+    public ArticleFullInfoDTO getById(String id, LangEnum langEnum) {
         ArticleEntity entity = get(id);
         if (!entity.getVisible() || !entity.getStatus().equals(ArticleStatus.PUBLISHED)) {
             throw new AppBadRequestException("Wrong article status");
         }
         return toFullDTO(entity, langEnum);
     }
+
     public ArticleFullInfoDTO toFullDTO(ArticleEntity entity, LangEnum langEnum) {
         ArticleFullInfoDTO dto = new ArticleFullInfoDTO();
         dto.setId(entity.getId());
@@ -175,16 +166,16 @@ public class ArticleService {
         return dto;
     }
 
-     public List<ArticleShortInfoDTO> getLast4ByType(Integer typeId, String articleId){
-         List<ArticleShortInfoDTO> last5ByTypeId = getLast5ByTypeId(typeId);
-         List<ArticleShortInfoDTO> resultList = new ArrayList<>();
-         for (ArticleShortInfoDTO item : last5ByTypeId) {
-             if (!articleId.equals(item.getId())){
-                 resultList.add(item);
-             }
-         }
-         return resultList;
-     }
+    public List<ArticleShortInfoDTO> getLast4ByType(Integer typeId, String articleId) {
+        List<ArticleShortInfoDTO> last5ByTypeId = getLast5ByTypeId(typeId);
+        List<ArticleShortInfoDTO> resultList = new ArrayList<>();
+        for (ArticleShortInfoDTO item : last5ByTypeId) {
+            if (!articleId.equals(item.getId())) {
+                resultList.add(item);
+            }
+        }
+        return resultList;
+    }
 
 
     public List<ArticleShortInfoDTO> getMostReadArticles() {
@@ -254,166 +245,5 @@ public class ArticleService {
         });
         return new PageImpl<>(dtoList, PageRequest.of(page, size), pageObj.getTotalElements());
     }
-
-    //    public ArticleFullInfoDTO getByIdAndLanguage(String id, String language) {
-//        Optional<ArticleEntity> optional = articleRepository.getById(id, ArticleStatus.PUBLISHED);
-//        if (optional.isEmpty()) {
-//            throw new ItemNotFoundException("Article not found");
-//        }
-//        ArticleEntity entity= optional.get();
-//        switch (language){
-//            case "uz"->{
-//                RegionEntity region = regionService.get(entity.getRegionId());
-//                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
-//                regionResponseDTO.setId(region.getId());
-//                regionResponseDTO.setName(region.getNameUz());
-//
-//                CategoryEntity category = categoryService.get(entity.getCategoryId());
-//                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
-//                categoryResponseDTO.setId(category.getId());
-//                categoryResponseDTO.setName(category.getNameUz());
-//                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
-//            }case "ru"->{
-//                RegionEntity region = regionService.get(entity.getRegionId());
-//                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
-//                regionResponseDTO.setId(region.getId());
-//                regionResponseDTO.setName(region.getNameRu());
-//
-//                CategoryEntity category = categoryService.get(entity.getCategoryId());
-//                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
-//                categoryResponseDTO.setId(category.getId());
-//                categoryResponseDTO.setName(category.getNameRu());
-//                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
-//            }case "eng"->{
-//                RegionEntity region = regionService.get(entity.getRegionId());
-//                RegionResponseDTO regionResponseDTO = new RegionResponseDTO();
-//                regionResponseDTO.setId(region.getId());
-//                regionResponseDTO.setName(region.getNameEn());
-//
-//                CategoryEntity category = categoryService.get(entity.getCategoryId());
-//                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
-//                categoryResponseDTO.setId(category.getId());
-//                categoryResponseDTO.setName(category.getNameEn());
-//                return toFullInfoDTO(entity, regionResponseDTO, categoryResponseDTO);
-//            }
-//            default -> {
-//                throw new MethodNotAllowedException("Language not found");
-//            }
-//        }
-//    }
-//
-//     public ArticleFullInfoDTO toFullInfoDTO(ArticleEntity entity,
-//                                             RegionResponseDTO regionResponseDTO,
-//                                             CategoryResponseDTO categoryResponseDTO){
-//
-//         ArticleFullInfoDTO dto = new ArticleFullInfoDTO();
-//         dto.setId(entity.getId());
-//         dto.setTitle(entity.getTitle());
-//         dto.setDescription(entity.getDescription());
-//         dto.setContent(entity.getContent());
-//         dto.setRegion(regionResponseDTO);
-//         dto.setCategory(categoryResponseDTO);
-//         dto.setPublishedDate(entity.getPublishedDate());
-//         dto.setSharedCount(entity.getSharedCount());
-//         dto.setViewCount(entity.getViewCount());
-////         dto.setLikeCount(entity.getLikeCount());
-//         return dto;
-//     }
-
-
-    //    public ArticleDTO create(ArticleDTO dto) {
-//        isValidProfile(dto);
-//        ArticleEntity entity = new ArticleEntity();
-//        entity.setTitle(dto.getTitle());
-//        entity.setDescription(dto.getDescription());
-//        entity.setContent(dto.getContent());
-//        entity.setSharedCount(dto.getSharedCount());
-//
-//        Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(dto.getRegionId());
-//        entity.setRegionId(optionalRegionEntity.get());
-//
-//        Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
-//        entity.setCategory(optionalCategoryEntity.get());
-//        entity.setStatus();(ArticleStatus.NOT_PUBLISHED);
-//        articleRepository.save(entity);
-//        return dto;
-//    }
-//    public ArticleDTO update(String id, ArticleDTO dto) {
-//        Optional<ArticleEntity> optional = articleRepository.findById(id);
-//        if (optional.isEmpty()) {
-//            throw new AppBadRequestException(" yoqku ");
-//        }
-//        // isValidProfile(dto);
-//        ArticleEntity entity = optional.get();
-////        entity.setId(dto.getId());
-//        entity.setTitle(dto.getTitle());
-//        entity.setDescription(dto.getDescription());
-//        entity.setContent(dto.getContent());
-//        entity.setSharedCount(dto.getSharedCount());
-//
-//        Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(dto.getRegionId());
-//        entity.setRegion(optionalRegionEntity.get());
-//
-//        Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
-//        entity.setCategory(optionalCategoryEntity.get());
-//        entity.setStatus(ArticleStatus.NOT_PUBLISHED);
-//        articleRepository.save(entity);
-//
-//        dto.setId(entity.getId());
-//        return dto;
-//    }
-
-//    public boolean update2(String  id, ArticleDTO dto) {
-//        Optional<ArticleEntity> optional = articleRepository.findById(id);
-//        if (optional.isEmpty()) {
-//            throw new AppBadRequestException(" yoqku ");
-//        }
-//
-//        if(dto.getArticleStatus().equals(ArticleStatus.NOT_PUBLISHED)){
-//            ArticleEntity entity = optional.get();
-//            entity.setStatus(ArticleStatus.PUBLISHED);
-//            articleRepository.save(entity);
-//        } else if(dto.getArticleStatus().equals(ArticleStatus.PUBLISHED)){
-//            ArticleEntity entity = optional.get();
-//            entity.setStatus(ArticleStatus.NOT_PUBLISHED);
-//            articleRepository.save(entity);
-//        }
-//        return true;
-//    }
-
-//    public Page<ArticleEntity> getAll(int page, int size) {
-//        return null;
-//    }
-
-//    public void isValidProfile(ArticleDTO dto) {
-//        if (dto.getCategoryId() == null) {
-//            throw new AppBadRequestException("invalid category");
-//        }
-//        Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(dto.getCategoryId());
-//        if (optionalCategoryEntity.isEmpty()) {
-//            throw new AppBadRequestException("not found category");
-//        }
-//
-//        if (dto.getRegionId() == null) {
-//            throw new AppBadRequestException("invalid region");
-//        }
-//        Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(dto.getRegionId());
-//        if (optionalRegionEntity.isEmpty()) {
-//            throw new AppBadRequestException("not found region");
-//        }
-//        if (dto.getDescription() == null) {
-//            throw new AppBadRequestException("invalid desc");
-//        }
-//        if (dto.getSharedCount() == null) {
-//            throw new AppBadRequestException("invalid sharedCount");
-//        }
-//        if (dto.getContent() == null) {
-//            throw new AppBadRequestException("invalid con");
-//        }
-//        if (dto.getTitle() == null) {
-//            throw new AppBadRequestException("invalid title");
-//
-//        }
-//    }
 
 }

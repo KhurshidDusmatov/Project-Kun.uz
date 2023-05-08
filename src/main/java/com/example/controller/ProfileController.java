@@ -7,6 +7,7 @@ import com.example.dto.profile.ProfileUpdateDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.ProfileService;
 import com.example.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +22,13 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    @PostMapping({"", "/"})
-    public ResponseEntity<ProfileDTO> create(@RequestBody ProfileDTO dto,
-                                             @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(profileService.create(dto, jwtDTO.getId()));
+    @PostMapping({ "/private"})
+    public ResponseEntity<ProfileDTO> create(@RequestBody @Valid
+                                             ProfileDTO dto,
+                                             HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(profileService.create(dto, prtId));
     }
 
     @PutMapping("/update-by-admin")

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProfileDTO {
-    @NotNull
+
     private Integer id;
     @NotNull(message = "Name required")
     @Size(min = 3, max = 225, message = "Name must be between 3 and 225 characters")
@@ -19,7 +19,7 @@ public class ProfileDTO {
     @NotNull(message = "Surname required")
     @Size(min = 3, max = 225, message = "Surname must be between 3 and 225 characters")
     private String surname;
-    @NotNull(message = "Name required")
+    @NotNull(message = "email required")
     @Size(min = 15, max = 225, message = "Name must be between 3 and 225 characters")
     private String email;
     @NotNull(message = "Phone required")
@@ -28,7 +28,5 @@ public class ProfileDTO {
     @NotNull(message = "Password required")
     @Size(min = 8, max = 225, message = "Password must be between 8 and 225 characters")
     private String password;
-    @NotNull
-    @NotEmpty
     private ProfileRole role;
 }

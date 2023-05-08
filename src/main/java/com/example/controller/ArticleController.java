@@ -24,15 +24,16 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @PostMapping({"", "/private"})
-    public ResponseEntity<?> create(@RequestBody @Valid ArticleRequestDTO dto,
-                                    HttpServletRequest request ) {
+    @PostMapping({"/private"})
+    public ResponseEntity<?> create(@RequestBody @Valid
+                                    ArticleRequestDTO dto,
+                                    HttpServletRequest request) {
         JwtUtil.checkForRequiredRole(request, ProfileRole.MODERATOR);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(articleService.create(dto, prtId));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/private/update/{id}")
     public ResponseEntity<ArticleRequestDTO> update(@PathVariable("id") String id,
                                                     @RequestBody @Valid ArticleRequestDTO dto,
                                                     @RequestHeader("Authorization") String authorization) {
@@ -46,6 +47,7 @@ public class ArticleController {
         JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR, ProfileRole.ADMIN);
         return ResponseEntity.ok(articleService.delete(id));
     }
+
     @GetMapping("/private/change-status/{id}")
     public ResponseEntity<?> changeStatus(@PathVariable("id") String id,
                                           @RequestParam String status,
@@ -54,42 +56,43 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.changeStatus(ArticleStatus.valueOf(status), id, jwt.getId()));
     }
 
-    @GetMapping("private/type/{id}/five")
+    @GetMapping("/public/type/{id}/five")
     public ResponseEntity<List<ArticleShortInfoDTO>> get5ByTypeId(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(articleService.getLast5ByTypeId(id));
     }
 
-    @GetMapping("private/type/{id}")
+    @GetMapping("/public/type/{id}")
     public ResponseEntity<List<ArticleShortInfoDTO>> getNByTypeId(@PathVariable("id") Integer typeId, @RequestParam("limit") Integer limit) {
         return ResponseEntity.ok(articleService.getLastNByTypeId(typeId, limit));
     }
 
-    @PostMapping("public/get-last8")
+    @PostMapping("/public/get-last8")
     public ResponseEntity<List<ArticleShortInfoDTO>> get8ExceptList(@RequestBody ArticleRequestListDTO dto) {
         return ResponseEntity.ok(articleService.getLast8NotGivenList(dto.getIdList()));
     }
 
-    @GetMapping("public/{id}")
+    @GetMapping("/public/{id}")
     public ResponseEntity<ArticleFullInfoDTO> getById(@PathVariable("id") String id,
                                                       @RequestHeader(value = "Accept-Language", defaultValue = "uz", required = false) LangEnum lang) {
         return ResponseEntity.ok(articleService.getById(id, lang));
     }
-    @GetMapping("public/get-last-4")
+
+    @GetMapping("/public/get-last-4")
     public ResponseEntity<List<ArticleShortInfoDTO>> getLast4(@RequestParam("type-id") Integer typeId, @RequestParam("article-id") String articeleId) {
         return ResponseEntity.ok(articleService.getLast4ByType(typeId, articeleId));
     }
 
-    @PostMapping("public/get-most-read-articles")
+    @PostMapping("/public/get-most-read-articles")
     public ResponseEntity<List<ArticleShortInfoDTO>> getMostReadArticles(@RequestParam("type-id") Integer typeId, @RequestParam("article-id") String articeleId) {
         return ResponseEntity.ok(articleService.getMostReadArticles());
     }
 
-    @GetMapping("public/get-article-by-type-and-region")
+    @GetMapping("/public/get-article-by-type-and-region")
     public ResponseEntity<List<ArticleShortInfoDTO>> getArticleByTypeAndRegion(@RequestParam("type-id") Integer typeId, @RequestParam("region-id") Integer regionId) {
         return ResponseEntity.ok(articleService.getArticleByTypeAndRegion(typeId, regionId));
     }
 
-    @GetMapping(value = "public/pagination-by-region")
+    @GetMapping(value = "/public/pagination-by-region")
     public ResponseEntity<?> paginationByRegion(@RequestParam(value = "page", defaultValue = "1") int page,
                                                 @RequestParam(value = "size", defaultValue = "4") int size,
                                                 @RequestParam("regionId") Integer regionId) {
@@ -97,12 +100,12 @@ public class ArticleController {
         return ResponseEntity.ok(pagination);
     }
 
-    @GetMapping("/get-article-by-category")
+    @GetMapping("/public/get-article-by-category")
     public ResponseEntity<List<ArticleShortInfoDTO>> getArticleByCategory(@RequestParam("category-id") Integer categoryId) {
         return ResponseEntity.ok(articleService.getArticleByCategory(categoryId));
     }
 
-    @GetMapping(value = "/pagination-by-category")
+    @GetMapping(value = "/public/pagination-by-category")
     public ResponseEntity<?> paginationByCategory(@RequestParam(value = "page", defaultValue = "1") int page,
                                                   @RequestParam(value = "size", defaultValue = "4") int size,
                                                   @RequestParam("categoryId") Integer categoryId) {
@@ -110,7 +113,7 @@ public class ArticleController {
         return ResponseEntity.ok(pagination);
     }
 
-    @PostMapping("/filter")
+    @PostMapping("/public/filter")
     public ResponseEntity<Page<ArticleShortInfoDTO>> filter(@RequestBody ArticleFilterDTO dto,
                                                             @RequestParam(value = "page", defaultValue = "1") int page,
                                                             @RequestParam(value = "size", defaultValue = "10") int size) {

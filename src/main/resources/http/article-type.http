@@ -1,12 +1,12 @@
 ### Create ArticleType
-POST localhost:8080/api/v1/article-type
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODE4OTAwMTgsImlkIjoyLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODE5NzY0MTgsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.o9vSGthi1vZwrBFfWG1a4RUWPqQbOcA0JGIaIewXg18M23XgadgOxM1L9Lw2Dd8pG2HZZNZzs7l2kdRSR8713g
+POST localhost:8080/api/v1/article-type/private
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODM1NzA1MDIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODM2NTY5MDIsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.J4hGviDluxkQEKhqJExhtllUTqHwOpc_OTVO9BgIFlDWSfdwk5QF3ehf-L82mZBRrjJd4inGkzcnSWld5SEQlw
 Content-Type:  application/json
 
 {
-  "nameUz": "Kitob",
-  "nameRu": "книга",
-  "nameEn": "Book"
+  "nameUz": "Type Uz",
+  "nameRu": "Type Ru",
+  "nameEn": "Type Eng"
 }
 
 ### update

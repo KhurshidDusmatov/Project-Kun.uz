@@ -5,6 +5,8 @@ import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.ArticleTypeService;
 import com.example.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -19,25 +21,26 @@ public class ArticleTypeController {
     @Autowired
     private ArticleTypeService articleTypeService;
 
-    @PostMapping({"", "/"})
-    public ResponseEntity<ArticleTypeDTO> create(@RequestBody ArticleTypeDTO dto,
-                                                 @RequestHeader("Authorization") String authorization) {
-
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(articleTypeService.create(dto, jwtDTO.getId()));
+    @PostMapping({"/private"})
+    public ResponseEntity<ArticleTypeDTO> create(@RequestBody @Valid
+                                                 ArticleTypeDTO dto,
+                                                 HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(articleTypeService.create(dto, prtId));
     }
 
     @PutMapping("/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
-                                             @RequestBody ArticleTypeDTO dto,
-                                             @RequestHeader("Authorization") String authorization) {
+                                         @RequestBody ArticleTypeDTO dto,
+                                         @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(articleTypeService.update(id, dto, jwtDTO.getId()));
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
-                                         @RequestHeader("Authorization") String authorization) {
+                                          @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(articleTypeService.delete(id, jwtDTO.getId()));
     }

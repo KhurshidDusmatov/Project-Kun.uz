@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ArticleRequestDTO {
+    private String id;
     @NotNull(message = "title required")
     @Size(min = 3, max = 225, message = "Title must be between 3 and 225 characters")
     private String title;

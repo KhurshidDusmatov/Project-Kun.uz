@@ -34,9 +34,15 @@ public interface ArticleRepository extends CrudRepository<ArticleEntity,String>,
 
 
     @Query(value = "SELECT a.id,a.title,a.description,a.attach_id,a.published_date " +
-            " FROM article AS a  where  a.type_id =:typeId and status =:status order by created_date desc Limit :limit",
+            " FROM article AS a  where  a.article_type_id =:typeId and status =:status order by created_date desc Limit :limit",
             nativeQuery = true)
     List<ArticleShortInfoMapper> find5ByTypeIdNative(@Param("typeId") Integer typeId,
+                                                     @Param("status") String status,
+                                                     @Param("limit") Integer limit);
+    @Query(value = "SELECT * " +
+            " FROM article AS a  where  a.article_type_id =:typeId and status =:status order by created_date desc Limit :limit",
+            nativeQuery = true)
+    List<ArticleEntity> find5ByTypeIdNative2(@Param("typeId") Integer typeId,
                                                      @Param("status") String status,
                                                      @Param("limit") Integer limit);
     @Query("From ArticleEntity where status =:status and visible = true and typeId =:typeId order by createdDate desc limit 5")
@@ -70,5 +76,8 @@ public interface ArticleRepository extends CrudRepository<ArticleEntity,String>,
     @Query("From ArticleEntity where status =:status and visible = true and id not in :list order by createdDate desc limit 8")
     List<ArticleEntity> get8ByExceptList(@Param("status") ArticleStatus status,
                                          @Param("list") List<String> idList);
+
+    @Query(value = "select * from article where id =:id", nativeQuery = true)
+    Optional<ArticleEntity> getById(@Param("id") String id);
 
 }

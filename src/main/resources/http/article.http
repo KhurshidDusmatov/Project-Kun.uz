@@ -1,15 +1,15 @@
 ### Create Article
-POST localhost:8080/api/v1/article
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODI4Nzc5NTksImlkIjo0LCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgyOTY0MzU5LCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.wdgon2xzLLt418S3KyN5NRAkF_tNE4z7tp_7fYoj67OlTCgaxR-APDIlQ_FTZmDahMnqH460iO2EyG4L5bXofQ
+POST localhost:8080/api/v1/article/private
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODM1NzI0NTAsImlkIjozLCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgzNjU4ODUwLCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.MbgmExNCKbmOo8RDX22sUUZb4_6uL1xEBb1rN6en8nIn-2zfeCSAHZcwi-FhLt71b6NU7g3S7gdC7WprecpRpQ
 Content-Type:  application/json
 
 {
-  "title": "title 7 ",
+  "title": "The 9th of May 12:02 am",
   "description": "Biggest waters in the world",
   "content": "Vs vs Vs",
   "regionId": 1,
   "categoryId": 1,
-  "attachId": "82caaa61-3b21-4c8e-8005-c3e32b5f5008",
+  "attachId": "dc2a9e05-80fa-4530-a618-2cf78c65b32d",
   "articleTypeId": 2
 }
 
@@ -35,24 +35,22 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODIzOTYxODUsImlkIjoxMCwic
 Content-Type:  application/json
 
 ### Get Top 5 article By TypeId
-GET localhost:8080/api/v1/article/type/2/five
+GET localhost:8080/api/v1/article/public/type/2/five
 
-### Get Top 5 article By TypeId
-GET localhost:8080/api/v1/article/get-last8
+### Get Last 8 article
+GET localhost:8080/api/v1/article/public/get-last8
 Content-Type: application/json
 
 {
   "idList": ["444da53e-1808-4148-8842-25ea366f793a", "66c9ebbb-0f76-45a3-a20f-ec6223b20344", "07e78eba-f0bf-4a16-a0e7-63fdffa3659a"]
 }
 
-### Get by id and Language
-GET localhost:8080/api/v1/article/get-by-id-lang?id=2fdf43a8-858b-4547-822f-d37bdf58c01b&language=ru
 ### Get by id
-GET localhost:8080/api/v1/article/2fdf43a8-858b-4547-822f-d37bdf58c01b
-Accept-Language: ru
+GET localhost:8080/api/v1/article/public/ac60f76e-523b-4c4d-87a6-199cdaf8e6b2
+Accept-Language: en
 
 ### Filter
-POST localhost:8080/api/v1/article/filter
+POST localhost:8080/api/v1/article/public/filter
 Content-Type: application/json
 
 {

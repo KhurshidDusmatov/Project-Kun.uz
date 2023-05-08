@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ArticleTypeDTO {
 
-    @NotNull
-    @Positive
+
     private Integer id;
     @NotNull(message = "Item required")
     @Size(min = 2, max = 225, message = "Item must be between 2 and 225 characters")

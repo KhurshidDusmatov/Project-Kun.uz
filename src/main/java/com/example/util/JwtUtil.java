@@ -4,6 +4,7 @@ import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ProfileRole;
 import com.example.exps.MethodNotAllowedException;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Date;
 
@@ -34,24 +35,14 @@ public class JwtUtil {
     }
 
     public static JwtDTO decode(String token) {
-        try {
             JwtParser jwtParser = Jwts.parser();
             jwtParser.setSigningKey(secretKey);
-
             Jws<Claims> jws = jwtParser.parseClaimsJws(token);
-
             Claims claims = jws.getBody();
-
             Integer id = (Integer) claims.get("id");
-
             String role = (String) claims.get("role");
             ProfileRole profileRole = ProfileRole.valueOf(role);
-
             return new JwtDTO(id, profileRole);
-        } catch (JwtException e) {
-            e.printStackTrace();
-        }
-        throw new MethodNotAllowedException("Jwt exception");
     }
     public static String decodeEmailVerification(String token) {
         try {
@@ -87,6 +78,20 @@ public class JwtUtil {
             throw new MethodNotAllowedException("Method not allowed");
         }
         return jwtDTO;
+    }
+
+    public static void checkForRequiredRole(HttpServletRequest request, ProfileRole... roleList) {
+        ProfileRole jwtRole = (ProfileRole) request.getAttribute("role");
+        boolean roleFound = false;
+        for (ProfileRole role : roleList) {
+            if (jwtRole.equals(role)) {
+                roleFound = true;
+                break;
+            }
+        }
+        if (!roleFound) {
+            throw new MethodNotAllowedException("Method not allowed");
+        }
     }
 
 

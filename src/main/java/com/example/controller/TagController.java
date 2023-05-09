@@ -19,14 +19,14 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    @PostMapping({"", "/"})
+    @PostMapping({"", "/private"})
     public ResponseEntity<TagDTO> create(@RequestBody TagRequestDTO dto,
                                          @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN, ProfileRole.MODERATOR);
         return ResponseEntity.ok(tagService.create(dto, jwtDTO.getId()));
     }
 
-    @PutMapping("/update")
+    @PutMapping("/private/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody TagDTO dto,
                                          @RequestHeader("Authorization") String authorization) {
@@ -34,14 +34,14 @@ public class TagController {
         return ResponseEntity.ok(tagService.update(id, dto, jwtDTO.getId()));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/private/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
                                           @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN, ProfileRole.MODERATOR);
         return ResponseEntity.ok(tagService.delete(id, jwtDTO.getId()));
     }
 
-    @GetMapping(value = "/get-all")
+    @GetMapping(value = "/private/get-all")
     public ResponseEntity<?> getAll(@RequestHeader("Authorization") String authorization) {
         JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN, ProfileRole.MODERATOR);
         List<TagDTO> list = tagService.getAll();

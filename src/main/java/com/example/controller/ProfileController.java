@@ -34,9 +34,10 @@ public class ProfileController {
     @PutMapping("/private/update-by-admin")
     public ResponseEntity<ProfileDTO> update(@RequestParam("id") Integer id,
                                              @RequestBody ProfileDTO dto,
-                                             @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(profileService.update(id, dto, jwtDTO.getId()));
+                                             HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(profileService.update(id, dto, prtId));
     }
 
     @PutMapping("/public/update")
@@ -47,9 +48,10 @@ public class ProfileController {
 
     @DeleteMapping("/private/delete")
     public ResponseEntity<String> delete(@RequestParam("id") Integer id,
-                                         @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(profileService.delete(id, jwtDTO.getId()));
+                                        HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(profileService.delete(id, prtId));
     }
 
     @GetMapping("/public/{id}")

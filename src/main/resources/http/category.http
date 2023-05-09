@@ -11,7 +11,7 @@ Content-Type:  application/json
 }
 
 ### update
-PUT localhost:8080/api/v1/category/update?id=2
+PUT localhost:8080/api/v1/category/private/update?id=2
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODE4OTAwMTgsImlkIjoyLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODE5NzY0MTgsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.o9vSGthi1vZwrBFfWG1a4RUWPqQbOcA0JGIaIewXg18M23XgadgOxM1L9Lw2Dd8pG2HZZNZzs7l2kdRSR8713g
 Content-Type:  application/json
 
@@ -22,7 +22,7 @@ Content-Type:  application/json
 }
 
 ### Delete
-DELETE localhost:8080/api/v1/category/delete?id=3
+DELETE localhost:8080/api/v1/category/private/delete?id=3
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODE4OTAwMTgsImlkIjoyLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODE5NzY0MTgsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.o9vSGthi1vZwrBFfWG1a4RUWPqQbOcA0JGIaIewXg18M23XgadgOxM1L9Lw2Dd8pG2HZZNZzs7l2kdRSR8713g
 
 ### Get List

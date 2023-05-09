@@ -4,6 +4,7 @@ import com.example.dto.jwt.JwtDTO;
 import com.example.service.ArticleLikeService;
 import com.example.service.CommentLikeService;
 import com.example.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +15,22 @@ public class CommentLikeController {
     @Autowired
     private CommentLikeService commentLikeService;
 
-    @GetMapping( "/like{articleId}")
+    @GetMapping( "/public/like{articleId}")
     public ResponseEntity<?> like(@PathVariable("articleId") Integer commentId,
-                                  @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(commentLikeService.like(commentId, jwtDTO.getId()));
+                                  HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(commentLikeService.like(commentId, prtId));
     }
-    @GetMapping( "/dislike{commentId}")
+    @GetMapping( "/public/dislike{commentId}")
     public ResponseEntity<?> dislike(@PathVariable("commentId") Integer commentId,
-                                  @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(commentLikeService.dislike(commentId, jwtDTO.getId()));
+                                     HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(commentLikeService.dislike(commentId, prtId));
     }
-    @GetMapping( "/delete{commentId}")
+    @GetMapping( "/public/delete{commentId}")
     public ResponseEntity<?> delete(@PathVariable("commentId") Integer commentId,
-                                   @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(commentLikeService.delete(commentId, jwtDTO.getId()));
+                                    HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(commentLikeService.delete(commentId, prtId));
     }
 }

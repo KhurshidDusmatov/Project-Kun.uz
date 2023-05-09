@@ -29,20 +29,22 @@ public class CategoryController {
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(categoryService.create(dto, prtId));
     }
-    @PutMapping("/update")
+    @PutMapping("/private/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody CategoryDTO dto,
-                                         @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(categoryService.update(id, dto, jwtDTO.getId()));
+                                        HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(categoryService.update(id, dto, prtId));
     }
-    @DeleteMapping("/delete")
+    @DeleteMapping("/private/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
-                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(categoryService.delete(id, jwtDTO.getId()));
+                                          HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(categoryService.delete(id, prtId));
     }
-    @GetMapping(value = "/get-all")
+    @GetMapping(value = "/public/get-all")
     public ResponseEntity<?> getAll() {
         List<CategoryDTO> list = categoryService.getAll();
         return ResponseEntity.ok(list);

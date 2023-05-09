@@ -31,7 +31,7 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.create(dto, prtId));
     }
 
-    @PutMapping("/update-by-admin")
+    @PutMapping("/private/update-by-admin")
     public ResponseEntity<ProfileDTO> update(@RequestParam("id") Integer id,
                                              @RequestBody ProfileDTO dto,
                                              @RequestHeader("Authorization") String authorization) {
@@ -39,48 +39,48 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.update(id, dto, jwtDTO.getId()));
     }
 
-    @PutMapping("/update")
+    @PutMapping("/public/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody ProfileUpdateDTO dto) {
         return ResponseEntity.ok(profileService.update(id, dto));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/private/delete")
     public ResponseEntity<String> delete(@RequestParam("id") Integer id,
                                          @RequestHeader("Authorization") String authorization) {
         JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
         return ResponseEntity.ok(profileService.delete(id, jwtDTO.getId()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/public/{id}")
     public ResponseEntity<ProfileDTO> getById(@PathVariable("id") Integer id) {
         return null;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/public/{id}")
     public ResponseEntity<ProfileDTO> deleteById(@PathVariable("id") Integer id) {
         return null;
     }
 
 
-    @GetMapping(value = "/pagination")
+    @GetMapping(value = "/public/pagination")
     public ResponseEntity<?> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "4") int size) {
         Page<ProfileDTO> pagination = profileService.pagination(page, size);
         return ResponseEntity.ok(pagination);
     }
 
-    @PostMapping("/filter-1")
+    @PostMapping("public/filter-1")
     public ResponseEntity<List<ProfileDTO>> getProfileWithFilter(@RequestBody @Valid ProfileFilterRequestDTO filterDTO) {
         List<ProfileDTO> dtos = profileService.filter(filterDTO);
         return ResponseEntity.ok(dtos);
     }
 
-    @PutMapping("/update-photo")
+    @PutMapping("public/update-photo")
     public ResponseEntity<String> updatePhotoId(@RequestParam("file-name") String fileName,
-                                                @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(profileService.updatePhotoId(fileName, jwtDTO.getId()));
+                                                HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(profileService.updatePhotoId(fileName, prtId));
     }
 
     @GetMapping("")

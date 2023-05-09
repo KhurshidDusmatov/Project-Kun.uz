@@ -1,11 +1,11 @@
 ## Create Comment
-POST localhost:8080/api/v1/comment
+POST localhost:8080/api/v1/comment/public
 Content-Type:  application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODMyOTAwOTksImlkIjo0LCJyb2xlIjoiTU9ERVJBVE9SIiwiZXhwIjoxNjgzMzc2NDk5LCJpc3MiOiJLdW51eiB0ZXN0IHBvcnRhbGkifQ.Em9B_1FrxNvucWImXykTQue8IryEtJEgyGiw-g37hwl34unjNj4pWmMwlykg0qCylnUsKD4Bq93H-l1I8eL9RQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODM1NzA1MDIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODM2NTY5MDIsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.J4hGviDluxkQEKhqJExhtllUTqHwOpc_OTVO9BgIFlDWSfdwk5QF3ehf-L82mZBRrjJd4inGkzcnSWld5SEQlw
 
 {
-  "content": "hello",
-  "articleId": "d0b9d1f3-0a34-4ca3-bf12-56e98099424c"
+  "content": "What is it ?",
+  "articleId": "96dd0407-4506-4a2f-9c0b-6f27e0b151fa"
 }
 
 ### update

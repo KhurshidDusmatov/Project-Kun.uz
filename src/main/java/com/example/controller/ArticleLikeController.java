@@ -5,6 +5,7 @@ import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.ArticleLikeService;
 import com.example.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,22 +17,24 @@ public class ArticleLikeController {
     @Autowired
     private ArticleLikeService articleLikeService;
 
-    @GetMapping( "/like{articleId}")
+    @GetMapping("/public/like{articleId}")
     public ResponseEntity<?> like(@PathVariable("articleId") String articleId,
-                                  @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(articleLikeService.like(articleId, jwtDTO.getId()));
+                                  HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(articleLikeService.like(articleId, prtId));
     }
-    @GetMapping( "/dislike{articleId}")
+
+    @GetMapping("/public/dislike{articleId}")
     public ResponseEntity<?> dislike(@PathVariable("articleId") String articleId,
-                                  @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(articleLikeService.dislike(articleId, jwtDTO.getId()));
+                                     HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(articleLikeService.dislike(articleId, prtId));
     }
-    @GetMapping( "/delete{articleId}")
+
+    @GetMapping("/public/delete{articleId}")
     public ResponseEntity<?> delete(@PathVariable("articleId") String articleId,
-                                   @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(articleLikeService.delete(articleId, jwtDTO.getId()));
+                                    HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(articleLikeService.delete(articleId, prtId));
     }
 }

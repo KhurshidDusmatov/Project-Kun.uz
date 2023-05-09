@@ -11,6 +11,7 @@ import com.example.dto.profile.ProfileDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.CommentService;
 import com.example.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -23,52 +24,53 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @PostMapping({"", "/"})
+    @PostMapping({"/public"})
     public ResponseEntity<CommentRequestDTO> create(@RequestBody CommentRequestDTO dto,
-                                                    @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(commentService.create(dto, jwtDTO.getId()));
+                                                    HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(commentService.create(dto, prtId));
     }
 
-    @PutMapping("/update")
+    @PutMapping("/public/update")
     public ResponseEntity<Boolean> update(@RequestParam("id") Integer id,
                                           @RequestBody CommentUpdateRequestDTO dto,
-                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(commentService.update(id, jwtDTO.getId(), dto));
+                                          HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(commentService.update(id, prtId, dto));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/public/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
-                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization);
-        return ResponseEntity.ok(commentService.delete(id, jwtDTO.getId(), jwtDTO.getRole()));
+                                          HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        ProfileRole role = (ProfileRole) request.getAttribute("role");
+        return ResponseEntity.ok(commentService.delete(id, prtId, role));
     }
 
-    @GetMapping("/get-all/{articleId}")
+    @GetMapping("/public/get-all/{articleId}")
     public ResponseEntity<?> getAll(@PathVariable String articleId) {
         return ResponseEntity.ok(commentService.getListByArticleId(articleId));
     }
 
-    @GetMapping(value = "/pagination")
+    @GetMapping(value = "/private/pagination")
     public ResponseEntity<?> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "4") int size,
-                                        @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
+                                        HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
         Page<CommentResponseDTO> pagination = commentService.pagination(page, size);
         return ResponseEntity.ok(pagination);
     }
 
-    @PostMapping("/filter")
+    @PostMapping("/private/filter")
     public ResponseEntity<Page<CommentResponseDTO>> filter(@RequestBody CommentFilterDTO dto,
-                                                            @RequestParam(value = "page", defaultValue = "1") int page,
-                                                            @RequestParam(value = "size", defaultValue = "10") int size,
-                                                            @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
+                                                           @RequestParam(value = "page", defaultValue = "1") int page,
+                                                           @RequestParam(value = "size", defaultValue = "10") int size,
+                                                           HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
         return ResponseEntity.ok(commentService.filter(dto, page, size));
     }
 
-    @GetMapping("/get-all-by-comment/{commentId}")
+    @GetMapping("public/get-all-by-comment/{commentId}")
     public ResponseEntity<?> getAllByCommentId(@PathVariable Integer commentId) {
         return ResponseEntity.ok(commentService.getListByCommentId(commentId));
     }

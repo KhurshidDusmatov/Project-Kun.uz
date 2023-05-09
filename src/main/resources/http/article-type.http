@@ -4,14 +4,14 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODM1NzA1MDIsImlkIjoxLCJyb
 Content-Type:  application/json
 
 {
-  "nameUz": "Type Uz",
-  "nameRu": "Type Ru",
-  "nameEn": "Type Eng"
+  "nameUz": "Uzbekcha",
+  "nameRu": "Russkiy",
+  "nameEn": "English"
 }
 
 ### update
-PUT localhost:8080/api/v1/article-type/update?id=3
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODE4OTAwMTgsImlkIjoyLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODE5NzY0MTgsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.o9vSGthi1vZwrBFfWG1a4RUWPqQbOcA0JGIaIewXg18M23XgadgOxM1L9Lw2Dd8pG2HZZNZzs7l2kdRSR8713g
+PUT localhost:8080/api/v1/article-type/private/update?id=3
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODM1NzA1MDIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODM2NTY5MDIsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.J4hGviDluxkQEKhqJExhtllUTqHwOpc_OTVO9BgIFlDWSfdwk5QF3ehf-L82mZBRrjJd4inGkzcnSWld5SEQlw
 Content-Type:  application/json
 
 {
@@ -21,8 +21,8 @@ Content-Type:  application/json
 }
 
 ### Delete
-DELETE localhost:8080/api/v1/article-type/delete?id=4
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODE4OTAwMTgsImlkIjoyLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODE5NzY0MTgsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.o9vSGthi1vZwrBFfWG1a4RUWPqQbOcA0JGIaIewXg18M23XgadgOxM1L9Lw2Dd8pG2HZZNZzs7l2kdRSR8713g
+DELETE localhost:8080/api/v1/article-type/private/delete?id=4
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODM1NzA1MDIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE2ODM2NTY5MDIsImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.J4hGviDluxkQEKhqJExhtllUTqHwOpc_OTVO9BgIFlDWSfdwk5QF3ehf-L82mZBRrjJd4inGkzcnSWld5SEQlw
 
 ### Get List
-GET localhost:8080/api/v1/article-type/pagination?page=1&size=3
+GET localhost:8080/api/v1/article-type/public/pagination?page=1&size=3

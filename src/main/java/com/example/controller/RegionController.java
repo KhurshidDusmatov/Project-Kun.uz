@@ -33,16 +33,17 @@ public class RegionController {
     @PutMapping("/private/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody RegionDTO dto,
-                                         @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(regionService.update(id, dto, jwtDTO.getId()));
+                                          HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(regionService.update(id, dto, prtId));
     }
 
     @DeleteMapping("/private/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
-                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(regionService.delete(id, jwtDTO.getId()));
+                                          HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(regionService.delete(id, prtId));
     }
 
     @GetMapping(value = "/public/get-all")

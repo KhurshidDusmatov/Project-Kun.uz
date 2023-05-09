@@ -10,6 +10,7 @@ import com.example.enums.ProfileRole;
 import com.example.service.SavedArticleService;
 import com.example.service.TagService;
 import com.example.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,27 +24,24 @@ public class SavedArticleController {
     @Autowired
     private SavedArticleService savedArticleService;
 
-    @PostMapping({"", "/"})
+    @PostMapping({"", "/public"})
     public ResponseEntity<SavedArticleRequestDTO> create(@RequestBody SavedArticleRequestDTO dto,
-                                         @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN,
-                ProfileRole.MODERATOR, ProfileRole.USER,ProfileRole.PUBLISHER );
-        return ResponseEntity.ok(savedArticleService.create(dto, jwtDTO.getId()));
+                                         HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(savedArticleService.create(dto, prtId));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/public/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") String id,
-                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN,
-                ProfileRole.MODERATOR, ProfileRole.USER,ProfileRole.PUBLISHER );
-        return ResponseEntity.ok(savedArticleService.delete(id, jwtDTO.getId()));
+                                          HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(savedArticleService.delete(id, prtId));
     }
 
-    @GetMapping(value = "/get-saved-articles")
-    public ResponseEntity<?> getAll(@RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN,
-                ProfileRole.MODERATOR, ProfileRole.USER,ProfileRole.PUBLISHER );
-        List<SavedArticleResponseDTO> list = savedArticleService.getAll(jwtDTO.getId());
+    @GetMapping(value = "/public/get-saved-articles")
+    public ResponseEntity<?> getAll(HttpServletRequest request) {
+        Integer prtId = (Integer) request.getAttribute("id");
+        List<SavedArticleResponseDTO> list = savedArticleService.getAll(prtId);
         return ResponseEntity.ok(list);
     }
 }

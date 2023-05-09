@@ -30,29 +30,31 @@ public class ArticleTypeController {
         return ResponseEntity.ok(articleTypeService.create(dto, prtId));
     }
 
-    @PutMapping("/update")
+    @PutMapping("/private/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody ArticleTypeDTO dto,
-                                         @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(articleTypeService.update(id, dto, jwtDTO.getId()));
+                                         HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(articleTypeService.update(id, dto, prtId));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/private/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
-                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
-        return ResponseEntity.ok(articleTypeService.delete(id, jwtDTO.getId()));
+                                        HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(articleTypeService.delete(id, prtId));
     }
 
-    @GetMapping(value = "/pagination")
+    @GetMapping(value = "/public/pagination")
     public ResponseEntity<?> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "4") int size) {
         Page<ArticleTypeDTO> pagination = articleTypeService.pagination(page, size);
         return ResponseEntity.ok(pagination);
     }
 
-    @GetMapping(value = "/get-by-language")
+    @GetMapping(value = "/public/get-by-language")
     public ResponseEntity<?> getByLanguage(@RequestParam("language") String language) {
         List<ArticleTypeDTO> list = articleTypeService.getByLanguage(language);
         return ResponseEntity.ok(list);

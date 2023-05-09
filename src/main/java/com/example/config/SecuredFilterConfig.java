@@ -20,6 +20,12 @@ public class SecuredFilterConfig {
         bean.addUrlPatterns("/api/v1/category/private/*");
         bean.addUrlPatterns("/api/v1/article-type/private/*");
         bean.addUrlPatterns("/api/v1/profile/private/*");
+        bean.addUrlPatterns("/api/v1/article-like/public/*");
+        bean.addUrlPatterns("/api/v1/comment/*");
+        bean.addUrlPatterns("/api/v1/comment-like/public/*");
+        bean.addUrlPatterns("/api/v1/email-history/private/*");
+        bean.addUrlPatterns("/api/v1/profile/private/*");
+        bean.addUrlPatterns("/api/v1/profile/public/update-photo");
         return bean;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.article.*;
-import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ArticleStatus;
 import com.example.enums.LangEnum;
 import com.example.enums.ProfileRole;
@@ -36,24 +35,25 @@ public class ArticleController {
     @PutMapping("/private/update/{id}")
     public ResponseEntity<ArticleRequestDTO> update(@PathVariable("id") String id,
                                                     @RequestBody @Valid ArticleRequestDTO dto,
-                                                    @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR);
+                                                    HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.MODERATOR);
         return ResponseEntity.ok(articleService.update(dto, id));
     }
 
     @DeleteMapping("/private/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") String id,
-                                    @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.MODERATOR, ProfileRole.ADMIN);
+                                   HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.MODERATOR, ProfileRole.ADMIN);
         return ResponseEntity.ok(articleService.delete(id));
     }
 
     @GetMapping("/private/change-status/{id}")
     public ResponseEntity<?> changeStatus(@PathVariable("id") String id,
                                           @RequestParam String status,
-                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwt = JwtUtil.getJwtDTO(authorization, ProfileRole.PUBLISHER);
-        return ResponseEntity.ok(articleService.changeStatus(ArticleStatus.valueOf(status), id, jwt.getId()));
+                                          HttpServletRequest request) {
+        JwtUtil.checkForRequiredRole(request, ProfileRole.PUBLISHER);
+        Integer prtId = (Integer) request.getAttribute("id");
+        return ResponseEntity.ok(articleService.changeStatus(ArticleStatus.valueOf(status), id, prtId));
     }
 
     @GetMapping("/public/type/{id}/five")

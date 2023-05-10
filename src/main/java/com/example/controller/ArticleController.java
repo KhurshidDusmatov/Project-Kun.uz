@@ -72,9 +72,8 @@ public class ArticleController {
     }
 
     @GetMapping("/public/{id}")
-    public ResponseEntity<ArticleFullInfoDTO> getById(@PathVariable("id") String id,
-                                                      @RequestHeader(value = "Accept-Language", defaultValue = "uz", required = false) LangEnum lang) {
-        return ResponseEntity.ok(articleService.getById(id, lang));
+    public ResponseEntity<ArticleShortInfoDTO> getById(@PathVariable("id") String id) {
+        return ResponseEntity.ok(articleService.getById(id));
     }
 
     @GetMapping("/public/get-last-4")

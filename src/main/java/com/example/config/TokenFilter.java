@@ -14,32 +14,32 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 
-@Component
-public class TokenFilter extends GenericFilterBean {
+//@Component
+//public class TokenFilter extends GenericFilterBean {
 
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("doFilter method has worked right now ");
-        final HttpServletRequest request = (HttpServletRequest) servletRequest;
-        final HttpServletResponse response = (HttpServletResponse) servletResponse;
-        final String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setHeader("Message", "Token not found");
-            return;
-        }
-        String token = authHeader.substring(7);
-        JwtDTO jwtDTO;
-        try {
-            jwtDTO = JwtUtil.decode(token);
-        }catch (JwtException e){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setHeader("Message", "Token not found");
-            return;
-        }
-        request.setAttribute("id", jwtDTO.getId());
-        request.setAttribute("role", jwtDTO.getRole());
-        filterChain.doFilter(request, response);
-
-    }
-}
+//    @Override
+//    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+//        System.out.println("doFilter method has worked right now ");
+//        final HttpServletRequest request = (HttpServletRequest) servletRequest;
+//        final HttpServletResponse response = (HttpServletResponse) servletResponse;
+//        final String authHeader = request.getHeader("Authorization");
+//        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            response.setHeader("Message", "Token not found");
+//            return;
+//        }
+//        String token = authHeader.substring(7);
+//        JwtDTO jwtDTO;
+//        try {
+//            jwtDTO = JwtUtil.decode(token);
+//        }catch (JwtException e){
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            response.setHeader("Message", "Token not found");
+//            return;
+//        }
+//        request.setAttribute("id", jwtDTO.getId());
+//        request.setAttribute("role", jwtDTO.getRole());
+//        filterChain.doFilter(request, response);
+//
+//    }
+//}

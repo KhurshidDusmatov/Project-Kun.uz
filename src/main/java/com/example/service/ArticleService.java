@@ -246,4 +246,12 @@ public class ArticleService {
         return new PageImpl<>(dtoList, PageRequest.of(page, size), pageObj.getTotalElements());
     }
 
+    public ArticleShortInfoDTO getById(String id) {
+        ArticleEntity entity = get(id);
+        if (!entity.getVisible() || !entity.getStatus().equals(ArticleStatus.PUBLISHED)) {
+            throw new AppBadRequestException("Wrong article status");
+        }
+        return toArticleShortInfo(entity);
+    }
+
 }

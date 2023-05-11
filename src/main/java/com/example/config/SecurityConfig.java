@@ -1,6 +1,7 @@
 package com.example.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import java.util.UUID;
 
 @EnableWebSecurity
+@Configuration
 public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -39,13 +41,24 @@ public class SecurityConfig {
         // URL ,API  Permission
         // /api/v1/article/private/* - MODERATOR
         // /api/v1/article//private/{id} - POST - MODERATOR
-        http.csrf().disable().cors().disable();
         http.authorizeHttpRequests()
                 .requestMatchers("/api/v1/*/public/**").permitAll()
-                .requestMatchers("/api/v1/article/private").hasRole("MODERATOR")
-                .requestMatchers( HttpMethod.PUT, "/api/v1/article/private/*").hasAnyRole("MODERATOR", "ADMIN")
+                .requestMatchers("/api/v1/article/private").hasRole("ADMIN")
+                .requestMatchers("/api/v1/article/private/change-status").hasRole("PUBLISHER")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/article/private/*").hasAnyRole("ADMIN", "MODERATOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/article/private/*").hasAnyRole("ADMIN", "MODERATOR")
                 .anyRequest()
-                .authenticated();
+                .authenticated().and().httpBasic();
         return http.build();
     }
+
+
+//     http.csrf().disable().cors().disable();
+//        http.authorizeHttpRequests()
+//                .requestMatchers("/api/v1/*/public/**").permitAll()
+//                .requestMatchers("/api/v1/article/private").hasRole("MODERATOR")
+//                .requestMatchers( HttpMethod.PUT, "/api/v1/article/private/*").hasAnyRole("MODERATOR", "ADMIN")
+//                .anyRequest()
+//                .authenticated();
+//        return http.build();
 }

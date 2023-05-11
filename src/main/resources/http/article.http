@@ -4,9 +4,9 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODM1NzI0NTAsImlkIjozLCJyb
 Content-Type:  application/json
 
 {
-  "title": "The 9th of May 3:27 am",
-  "description": "Biggest waters in the world",
-  "content": "Against",
+  "title": "The 11th of May 2:02 ",
+  "description": "Big sea in the world",
+  "content": "Nature",
   "regionId": 1,
   "categoryId": 1,
   "attachId": "dc2a9e05-80fa-4530-a618-2cf78c65b32d",

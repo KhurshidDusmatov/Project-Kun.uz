@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.create(dto, prtId));
     }
 
-    @PutMapping("/private/update/{id}")
+    @PutMapping("/private/{id}")
     public ResponseEntity<ArticleRequestDTO> update(@PathVariable("id") String id,
                                                     @RequestBody @Valid ArticleRequestDTO dto,
                                                     HttpServletRequest request) {
@@ -71,10 +73,19 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.getLast8NotGivenList(dto.getIdList()));
     }
 
-    @GetMapping("/public/{id}")
+    @GetMapping("/private/{id}")
     public ResponseEntity<ArticleShortInfoDTO> getById(@PathVariable("id") String id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.out.println(currentPrincipalName);
         return ResponseEntity.ok(articleService.getById(id));
     }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<ArticleFullInfoDTO> getById(@PathVariable("id") String id,
+//                                                      @RequestHeader(value = "Accept-Language", defaultValue = "uz", required = false) String lang) {
+//        return ResponseEntity.ok(articleService.getById(id, LangEnum.en));
+//    }
 
     @GetMapping("/public/get-last-4")
     public ResponseEntity<List<ArticleShortInfoDTO>> getLast4(@RequestParam("type-id") Integer typeId, @RequestParam("article-id") String articeleId) {

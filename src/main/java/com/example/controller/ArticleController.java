@@ -2,7 +2,6 @@ package com.example.controller;
 
 import com.example.dto.article.*;
 import com.example.enums.ArticleStatus;
-import com.example.enums.LangEnum;
 import com.example.enums.ProfileRole;
 import com.example.service.ArticleService;
 import com.example.util.JwtUtil;
@@ -29,7 +28,7 @@ public class ArticleController {
     public ResponseEntity<?> create(@RequestBody @Valid
                                     ArticleRequestDTO dto,
                                     HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.MODERATOR);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_MODERATOR);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(articleService.create(dto, prtId));
     }
@@ -38,14 +37,14 @@ public class ArticleController {
     public ResponseEntity<ArticleRequestDTO> update(@PathVariable("id") String id,
                                                     @RequestBody @Valid ArticleRequestDTO dto,
                                                     HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.MODERATOR);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_MODERATOR);
         return ResponseEntity.ok(articleService.update(dto, id));
     }
 
     @DeleteMapping("/private/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") String id,
                                    HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.MODERATOR, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_MODERATOR, ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(articleService.delete(id));
     }
 
@@ -53,7 +52,7 @@ public class ArticleController {
     public ResponseEntity<?> changeStatus(@PathVariable("id") String id,
                                           @RequestParam String status,
                                           HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.PUBLISHER);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_PUBLISHER);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(articleService.changeStatus(ArticleStatus.valueOf(status), id, prtId));
     }

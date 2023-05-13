@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.article.ArticleTypeDTO;
-import com.example.dto.jwt.JwtDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.ArticleTypeService;
 import com.example.util.JwtUtil;
@@ -25,7 +24,7 @@ public class ArticleTypeController {
     public ResponseEntity<ArticleTypeDTO> create(@RequestBody @Valid
                                                  ArticleTypeDTO dto,
                                                  HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(articleTypeService.create(dto, prtId));
     }
@@ -34,7 +33,7 @@ public class ArticleTypeController {
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody ArticleTypeDTO dto,
                                          HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(articleTypeService.update(id, dto, prtId));
     }
@@ -42,7 +41,7 @@ public class ArticleTypeController {
     @DeleteMapping("/private/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
                                         HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(articleTypeService.delete(id, prtId));
     }

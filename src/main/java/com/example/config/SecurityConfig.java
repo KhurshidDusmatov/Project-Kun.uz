@@ -75,6 +75,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/*/public/**").permitAll()
                 .requestMatchers("/api/v1/article/private").hasRole("USER")
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/profile/adm/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/article/private/*").hasAnyRole("MODERATOR", "ADMIN")
                 .anyRequest()
                 .authenticated().and().httpBasic();
@@ -105,14 +106,4 @@ public class SecurityConfig {
             }
         };
     }
-
-
-//     http.csrf().disable().cors().disable();
-//        http.authorizeHttpRequests()
-//                .requestMatchers("/api/v1/*/public/**").permitAll()
-//                .requestMatchers("/api/v1/article/private").hasRole("MODERATOR")
-//                .requestMatchers( HttpMethod.PUT, "/api/v1/article/private/*").hasAnyRole("MODERATOR", "ADMIN")
-//                .anyRequest()
-//                .authenticated();
-//        return http.build();
 }

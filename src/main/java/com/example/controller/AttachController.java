@@ -70,7 +70,7 @@ public class AttachController {
     public ResponseEntity<?> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "4") int size,
                                         @RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN);
+        JwtUtil.getJwtDTO(authorization, ProfileRole.ROLE_ADMIN);
         Page<AttachDTO> pagination = attachService.pagination(page, size);
         return ResponseEntity.ok(pagination);
     }

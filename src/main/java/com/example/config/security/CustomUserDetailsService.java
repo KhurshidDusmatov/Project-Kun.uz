@@ -15,14 +15,14 @@ import java.util.Optional;
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private ProfileRepository profileRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // adminjon_mazgi@gmail.com
-        System.out.println("loadUserByUsername");
         Optional<ProfileEntity> optional = profileRepository.findByEmail(username);
         if (optional.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
+        System.out.println("Load by Username");
         ProfileEntity profile = optional.get();
         return new CustomUserDetails(profile);
     }

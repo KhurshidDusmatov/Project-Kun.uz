@@ -20,7 +20,7 @@ public class ProfileDTO {
     @Size(min = 3, max = 225, message = "Surname must be between 3 and 225 characters")
     private String surname;
     @NotNull(message = "email required")
-    @Size(min = 15, max = 225, message = "Name must be between 3 and 225 characters")
+    @Size(min = 5, max = 225, message = "Name must be between 3 and 225 characters")
     private String email;
     @NotNull(message = "Phone required")
     @Size(min = 9, max = 13, message = "Name must be between 9 and 13 characters")

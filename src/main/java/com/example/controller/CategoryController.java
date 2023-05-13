@@ -1,8 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.category.CategoryDTO;
-import com.example.dto.jwt.JwtDTO;
-import com.example.dto.region.RegionDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.CategoryService;
 import com.example.util.JwtUtil;
@@ -25,7 +23,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> create(@RequestBody @Valid
                                               CategoryDTO dto,
                                               HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(categoryService.create(dto, prtId));
     }
@@ -33,14 +31,14 @@ public class CategoryController {
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody CategoryDTO dto,
                                         HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(categoryService.update(id, dto, prtId));
     }
     @DeleteMapping("/private/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
                                           HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(categoryService.delete(id, prtId));
     }

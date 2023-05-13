@@ -58,7 +58,7 @@ public class CommentService {
 
     public Boolean delete(Integer id, Integer ownerId, ProfileRole role) {
         Optional<CommentEntity> optional = commentRepository.findByIdAndOwnerId(id, ownerId);
-        if (optional.isPresent() || role.equals(ProfileRole.ADMIN)) {
+        if (optional.isPresent() || role.equals(ProfileRole.ROLE_ADMIN)) {
             commentRepository.updateVisible(id);
             return true;
         }

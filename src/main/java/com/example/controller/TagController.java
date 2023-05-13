@@ -22,28 +22,28 @@ public class TagController {
     @PostMapping({"", "/private"})
     public ResponseEntity<TagDTO> create(@RequestBody TagRequestDTO dto,
                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(tagService.create(dto, jwtDTO.getId()));
+        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ROLE_ADMIN, ProfileRole.ROLE_MODERATOR);
+        return ResponseEntity.ok(tagService.create(dto, null));
     }
 
     @PutMapping("/private/update")
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody TagDTO dto,
                                          @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(tagService.update(id, dto, jwtDTO.getId()));
+        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ROLE_ADMIN, ProfileRole.ROLE_MODERATOR);
+        return ResponseEntity.ok(tagService.update(id, dto, null));
     }
 
     @DeleteMapping("/private/delete")
     public ResponseEntity<Boolean> delete(@RequestParam("id") Integer id,
                                           @RequestHeader("Authorization") String authorization) {
-        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN, ProfileRole.MODERATOR);
-        return ResponseEntity.ok(tagService.delete(id, jwtDTO.getId()));
+        JwtDTO jwtDTO = JwtUtil.getJwtDTO(authorization, ProfileRole.ROLE_ADMIN, ProfileRole.ROLE_MODERATOR);
+        return ResponseEntity.ok(tagService.delete(id, null));
     }
 
     @GetMapping(value = "/private/get-all")
     public ResponseEntity<?> getAll(@RequestHeader("Authorization") String authorization) {
-        JwtUtil.getJwtDTO(authorization, ProfileRole.ADMIN, ProfileRole.MODERATOR);
+        JwtUtil.getJwtDTO(authorization, ProfileRole.ROLE_ADMIN, ProfileRole.ROLE_MODERATOR);
         List<TagDTO> list = tagService.getAll();
         return ResponseEntity.ok(list);
     }

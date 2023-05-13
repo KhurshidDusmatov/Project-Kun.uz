@@ -1,13 +1,9 @@
 package com.example.controller;
 
-import com.example.dto.article.ArticleFilterDTO;
-import com.example.dto.article.ArticleShortInfoDTO;
 import com.example.dto.comment.CommentFilterDTO;
 import com.example.dto.comment.CommentRequestDTO;
 import com.example.dto.comment.CommentResponseDTO;
 import com.example.dto.comment.CommentUpdateRequestDTO;
-import com.example.dto.jwt.JwtDTO;
-import com.example.dto.profile.ProfileDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.CommentService;
 import com.example.util.JwtUtil;
@@ -56,7 +52,7 @@ public class CommentController {
     public ResponseEntity<?> pagination(@RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "4") int size,
                                         HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Page<CommentResponseDTO> pagination = commentService.pagination(page, size);
         return ResponseEntity.ok(pagination);
     }
@@ -66,7 +62,7 @@ public class CommentController {
                                                            @RequestParam(value = "page", defaultValue = "1") int page,
                                                            @RequestParam(value = "size", defaultValue = "10") int size,
                                                            HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(commentService.filter(dto, page, size));
     }
 

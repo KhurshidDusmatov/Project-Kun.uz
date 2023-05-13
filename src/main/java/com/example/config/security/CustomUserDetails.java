@@ -57,4 +57,5 @@ public class CustomUserDetails implements UserDetails {
         return profileEntity.getVisible();
     }
 
+
 }

@@ -1,7 +1,5 @@
 package com.example.controller;
 
-import com.example.dto.article.ArticleRequestDTO;
-import com.example.dto.jwt.JwtDTO;
 import com.example.dto.region.RegionDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.RegionService;
@@ -25,7 +23,7 @@ public class RegionController {
     public ResponseEntity<RegionDTO> create(@RequestBody @Valid
                                             RegionDTO dto,
                                             HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(regionService.create(dto, prtId));
     }
@@ -34,7 +32,7 @@ public class RegionController {
     public ResponseEntity<String> update(@RequestParam("id") Integer id,
                                          @RequestBody RegionDTO dto,
                                           HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(regionService.update(id, dto, prtId));
     }

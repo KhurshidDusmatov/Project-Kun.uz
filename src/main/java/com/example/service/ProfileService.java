@@ -12,6 +12,7 @@ import com.example.repository.AttachRepository;
 import com.example.repository.ProfileCustomRepository;
 import com.example.repository.ProfileRepository;
 import com.example.util.MD5Util;
+import com.example.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -33,12 +34,12 @@ public class ProfileService {
     @Autowired
     private AttachService attachService;
 
-    public ProfileDTO create(ProfileDTO dto, Integer adminId) {
+    public ProfileDTO create(ProfileDTO dto) {
         // check - homework
         isValidProfile(dto);
 
         ProfileEntity entity = new ProfileEntity();
-        return setDetailToEntity(entity, dto, adminId);
+        return setDetailToEntity(entity, dto, SpringSecurityUtil.getProfileId());
     }
 
     public void isValidProfile(ProfileDTO dto) {

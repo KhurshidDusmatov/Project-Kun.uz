@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.filter.ProfileFilterRequestDTO;
-import com.example.dto.jwt.JwtDTO;
 import com.example.dto.profile.ProfileDTO;
 import com.example.dto.profile.ProfileUpdateDTO;
 import com.example.enums.ProfileRole;
@@ -22,20 +21,16 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    @PostMapping({ "/private"})
-    public ResponseEntity<ProfileDTO> create(@RequestBody @Valid
-                                             ProfileDTO dto,
-                                             HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
-        Integer prtId = (Integer) request.getAttribute("id");
-        return ResponseEntity.ok(profileService.create(dto, prtId));
+    @PostMapping({ "/adm", "/adm/"})
+    public ResponseEntity<ProfileDTO> create(@RequestBody @Valid ProfileDTO dto) {
+        return ResponseEntity.ok(profileService.create(dto));
     }
 
     @PutMapping("/private/update-by-admin")
     public ResponseEntity<ProfileDTO> update(@RequestParam("id") Integer id,
                                              @RequestBody ProfileDTO dto,
                                              HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(profileService.update(id, dto, prtId));
     }
@@ -49,7 +44,7 @@ public class ProfileController {
     @DeleteMapping("/private/delete")
     public ResponseEntity<String> delete(@RequestParam("id") Integer id,
                                         HttpServletRequest request) {
-        JwtUtil.checkForRequiredRole(request, ProfileRole.ADMIN);
+        JwtUtil.checkForRequiredRole(request, ProfileRole.ROLE_ADMIN);
         Integer prtId = (Integer) request.getAttribute("id");
         return ResponseEntity.ok(profileService.delete(id, prtId));
     }

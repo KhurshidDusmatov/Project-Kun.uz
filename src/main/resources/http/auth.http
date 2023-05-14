@@ -8,6 +8,7 @@ Content-Type:  application/json
 }
 ### Login Admin
 POST localhost:8080/api/v1/auth
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODQwNDkyNzksImVtYWlsIjoiYWRtaW5qb25fbWF6Z2lAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJleHAiOjE2ODQxMzU2NzksImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.wWsLESVc7OTLN1FYMNcAMOD26Rq3WOYqqg52Ryjbv_al-kJCsz2c-s3cs0Lt1QEXiPA97SeYUZ1crF2CjsVxXA
 Content-Type:  application/json
 
 {
@@ -16,6 +17,7 @@ Content-Type:  application/json
 }
 ### Sign Up
 POST localhost:8080/api/v1/auth/sign-up
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2ODQwNDkyNzksImVtYWlsIjoiYWRtaW5qb25fbWF6Z2lAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJleHAiOjE2ODQxMzU2NzksImlzcyI6Ikt1bnV6IHRlc3QgcG9ydGFsaSJ9.wWsLESVc7OTLN1FYMNcAMOD26Rq3WOYqqg52Ryjbv_al-kJCsz2c-s3cs0Lt1QEXiPA97SeYUZ1crF2CjsVxXA
 Content-Type:  application/json
 
 {

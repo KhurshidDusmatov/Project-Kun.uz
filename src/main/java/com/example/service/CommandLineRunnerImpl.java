@@ -1,5 +1,6 @@
 package com.example.service;
 import com.example.repository.ProfileRepository;
+import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

@@ -18,10 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
@@ -30,12 +32,32 @@ public class TokenFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        return Arrays.asList(SecurityConfig.AUTH_WHITELIST).stream()
+                .anyMatch(p -> {
+                    boolean match = pathMatcher.match(p, request.getServletPath());
+                    return match;
+                });
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         System.out.println("doFilter method");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+//        AntPathMatcher pathMatcher = new AntPathMatcher();
+//        boolean matched = Arrays.asList(SecurityConfig.AUTH_WHITELIST).stream()
+//                .anyMatch(p -> {
+//                    boolean match = pathMatcher.match(p, request.getServletPath());
+//                    return match;
+//                });
+//        if (matched){
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setHeader("Message", "Token not found");
             filterChain.doFilter(request, response);
@@ -54,12 +76,13 @@ public class TokenFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
-        }catch (JwtException e){
+        } catch (JwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setHeader("Message", "Token not found");
             return;
         }
     }
+
 
     //    @Override
 //    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

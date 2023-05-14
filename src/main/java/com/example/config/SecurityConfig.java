@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.UUID;
 
@@ -72,15 +74,21 @@ public class SecurityConfig {
         http.csrf().disable().cors().disable();
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests()
-                .requestMatchers("/api/v1/*/public/**").permitAll()
+//                .requestMatchers("/api/v1/*/public/**").permitAll()
+//                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers(AUTH_WHITELIST).permitAll()
                 .requestMatchers("/api/v1/article/private").hasRole("USER")
-                .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/profile/adm/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/article/private/*").hasAnyRole("MODERATOR", "ADMIN")
                 .anyRequest()
                 .authenticated().and().httpBasic();
         return http.build();
     }
+
+    public static String[] AUTH_WHITELIST = {"/api/v1/*/public/**",
+            "/api/v1/auth/**",
+            "/api/v1/auth"
+    };
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -103,6 +111,17 @@ public class SecurityConfig {
                     return true;
                 }
                 return false;
+            }
+        };
+
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
             }
         };
     }
